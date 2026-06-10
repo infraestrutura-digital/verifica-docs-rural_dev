@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: "VerificaIdade — Portal do Desenvolvedor"
+  title: "VerificaDocsCreditoRural — Portal do Desenvolvedor"
   sidebar:
     logo: "verificaidadedev.svg"
     style: "docked"
