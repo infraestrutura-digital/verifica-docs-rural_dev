@@ -119,10 +119,10 @@ Use **uma ou outra** opção, nunca ambas. O SDK rejeita se ambas forem fornecid
 
 ## Minimização de dados
 
-A Presentation Definition solicita **apenas o campo `ageOver18`**. Usando SD-JWT (Selective Disclosure), o cidadão pode apresentar **apenas esse campo** sem revelar nome, data de nascimento ou outros dados pessoais.
+A Presentation Definition solicita **apenas os campos necessários dos documentos**. Usando SD-JWT (Selective Disclosure), o cidadão pode apresentar **apenas esses campos** sem revelar nome, data de nascimento ou outros dados pessoais.
 
 ::: {.callout-note}
-Isso é **privacy by design**. Você confirma que a pessoa tem 18+ sem saber a idade exata ou qualquer outro dado pessoal.
+Isso é **privacy by design**. Você confirma os dados das propriedades do agricultor sem saber qualquer outro dado pessoal.
 :::
 
 ## Próximo passo

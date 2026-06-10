@@ -1,5 +1,5 @@
 ---
-title: "Integre em 1 Hora"
+title: "Integre rapidamente"
 ---
 
 ## Objetivo

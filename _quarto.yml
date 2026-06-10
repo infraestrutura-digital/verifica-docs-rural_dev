@@ -5,7 +5,7 @@ project:
 website:
   title: "VerificaDocsCreditoRural — Portal do Desenvolvedor"
   sidebar:
-    logo: "verificadocscreditorural.svg"
+    logo: "VerificaDocCreditoRural.svg"
     style: "docked"
     search: true
     contents:

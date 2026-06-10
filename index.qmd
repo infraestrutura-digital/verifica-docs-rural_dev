@@ -25,7 +25,7 @@ Para **desenvolvedores** de aplicativos/sistemas de Bancos ou Agentes Financeiro
 | Seção | O que resolve |
 |-------|--------------|
 | [Arquitetura em 1 Página](arquitetura.qmd) | Visão geral dos componentes |
-| [Integre em 1 Hora](quickstart.qmd) | Checklist passo a passo |
+| [Integre rapidamente](quickstart.qmd) | Checklist passo a passo |
 | [Setup da VM e Docker](setup-vm.qmd) | Preparar a infraestrutura |
 | [INJI Verify Service](inji-verify.qmd) | Subir o backend com Docker Compose |
 | [Fluxo de Verificação](fluxo-verificacao.qmd) | Entender o ciclo completo |
