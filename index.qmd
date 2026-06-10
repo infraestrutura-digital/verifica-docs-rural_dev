@@ -2,15 +2,15 @@
 title: "Boas-vindas"
 ---
 
-## O que é o VerificaIdade?
+## O que é o VerificaDocsCreditoRural?
 
-O [**VerificaIdade**](infraestrutura-digital.github.io/idade-website) é a solução nacional de verificação de idade (18+) baseada em credenciais verificáveis. 
+O [**VerificaDocsCreditoRural**](infraestrutura-digital.github.io/cred-rural-website) é a solução para compartilhamento de documentos requeridos para crédito rural baseada em credenciais verificáveis. 
 
 Essa solução de governo é baseada na stack [MOSIP INJI](https://docs.inji.io/) e funciona sobre o protocolo Open ID for Verifiable Credentials (OID4VC) que é interoperável com outras soluções e adotado por diversos países e organizações, estando já presente em forma experimental nos browsers Chrome e Safari mais recentes.
 
 ## Para quem é este portal?
 
-Para **desenvolvedores** de Plataformas Digitais, web ou mobile apps que precisam verificar idade de acordo com o [ECA Digital]().
+Para **desenvolvedores** de aplicativos/sistemas de Bancos ou Agentes Financeiros, web ou mobile apps que querem integrar compartilhamento digital de documentos para crédito rural de acordo com o padrão de Credenciais Verificáveis().
 
 ## Como funciona
 
@@ -31,7 +31,7 @@ Para **desenvolvedores** de Plataformas Digitais, web ou mobile apps que precisa
 | [Fluxo de Verificação](fluxo-verificacao.qmd) | Entender o ciclo completo |
 | [Integração Web (QR Code)](integra-web.qmd) | Fluxo cross-device no desktop |
 | [Integração Mobile (Deep Link)](integra-mobile.qmd) | Fluxo same-device no celular |
-| [Policy 18+](policy18.qmd) | Presentation Definition de idade |
+| [Policy Documentos de Crédito Rural](policy18.qmd) | Presentation Definition de documentos CAF, CCIR, Recibo do CAR e Demonstrativo do CAR |
 | [Segurança e LGPD](seguranca-lgpd.qmd) | Boas práticas |
 | [Produção e Operação](producao.qmd) | Deploy em produção |
 | [API Reference](api-reference.qmd) | Endpoints do INJI Verify Service |
