@@ -1,18 +1,18 @@
 ---
-title: "Policy 18+"
+title: "Policy Documentos de Crédito Rural"
 ---
 
 ## Objetivo
 
-Entender como configurar a Presentation Definition para verificação de idade (18+) usando o padrão OpenID4VP.
+Entender como configurar a Presentation Definition para documentos necessários para o crédito rural usando o padrão OpenID4VP.
 
 ## O que é uma Presentation Definition?
 
 A Presentation Definition (PD) é um documento JSON que descreve **quais credenciais e campos** você quer que o cidadão apresente. Ela segue o padrão [DIF Presentation Exchange](https://identity.foundation/presentation-exchange/).
 
-No caso do VerificaIdade, a PD solicita uma credencial que contenha `ageOver18: true`.
+No caso do verifica-docs-rural, a PD solicita uma credencial dos documentos CAF, Recibo do CAR, Demonstrativo do CAR e CCIR.
 
-## Presentation Definition para idade 18+
+## Presentation Definition para os documentos CAF, Recibo do CAR, Demonstrativo do CAR e CCIR:
 
 ```json
 {
