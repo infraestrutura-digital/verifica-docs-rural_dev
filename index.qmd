@@ -31,7 +31,7 @@ Para **desenvolvedores** de aplicativos/sistemas de Bancos ou Agentes Financeiro
 | [Fluxo de Verificação](fluxo-verificacao.qmd) | Entender o ciclo completo |
 | [Integração Web (QR Code)](integra-web.qmd) | Fluxo cross-device no desktop |
 | [Integração Mobile (Deep Link)](integra-mobile.qmd) | Fluxo same-device no celular |
-| [Policy Documentos de Crédito Rural](policy18.qmd) | Presentation Definition de documentos CAF, CCIR, Recibo do CAR e Demonstrativo do CAR |
+| [Policy Documentos de Crédito Rural](policy-credito-rural.qmd) | Presentation Definition de documentos CAF, CCIR, Recibo do CAR e Demonstrativo do CAR |
 | [Segurança e LGPD](seguranca-lgpd.qmd) | Boas práticas |
 | [Produção e Operação](producao.qmd) | Deploy em produção |
 | [API Reference](api-reference.qmd) | Endpoints do INJI Verify Service |
@@ -44,5 +44,5 @@ Para **desenvolvedores** de aplicativos/sistemas de Bancos ou Agentes Financeiro
 ? Credenciais de acesso ao gateway (obtidas no [Onboarding](onboarding.qmd))
 
 ::: {.callout-note}
-O objetivo é que um desenvolvedor experiente consiga integrar em **1 dia**. Comece pelo [Integre em 1 Dia](quickstart.qmd).
+O objetivo é que um desenvolvedor experiente consiga integrar em **1 dia**. Comece pelo [Integre rapidamente](quickstart.qmd).
 :::

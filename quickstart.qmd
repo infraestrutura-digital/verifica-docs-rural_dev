@@ -8,7 +8,7 @@ Sair do zero até uma verificação de idade funcionando em ambiente de desenvol
 
 ## Checklist
 
-| # | Etapa | Tempo | Resultado esperado |
+| # | Etapa | Tempos típico | Resultado esperado |
 |---|-------|-------|-------------------|
 | 1 | Preparar VM com Docker | 10 min | `docker compose version` funciona |
 | 2 | Subir INJI Verify Service | 10 min | Health check retorna `UP` |

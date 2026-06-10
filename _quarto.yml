@@ -25,7 +25,7 @@ website:
           - integra-mobile.qmd
       - section: "Referência"
         contents:
-          - policy18.qmd
+          - policy-credito-rural.qmd
           - seguranca-lgpd.qmd
           - producao.qmd
           - api-reference.qmd

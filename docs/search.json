@@ -934,7 +934,7 @@
     "href": "index.html#pré-requisitos",
     "title": "Boas-vindas",
     "section": "Pré-requisitos",
-    "text": "Pré-requisitos\n\nAcesso a uma VM com Docker para rodar o INJI Verify Service ? Credenciais de acesso ao gateway (obtidas no Onboarding)\n\n\n\n\n\n\n\nNota\n\n\n\nO objetivo é que um desenvolvedor experiente consiga integrar em 1 dia. Comece pelo Integre em 1 Dia.",
+    "text": "Pré-requisitos\n\nAcesso a uma VM com Docker para rodar o INJI Verify Service ? Credenciais de acesso ao gateway (obtidas no Onboarding)\n\n\n\n\n\n\n\nNota\n\n\n\nO objetivo é que um desenvolvedor experiente consiga integrar rapidamente. Comece pelo Integre rapidamente.",
     "crumbs": [
       "Boas-vindas"
     ]
