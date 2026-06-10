@@ -15,29 +15,160 @@ No caso do verifica-docs-rural, a PD solicita uma credencial dos documentos CAF,
 ## Presentation Definition para os documentos CAF, Recibo do CAR, Demonstrativo do CAR e CCIR:
 
 ```json
+"presentationDefinition": {
+ "id": "c4822b58-7fb4-454e-b827-f8758fe27f9a",
+ "purpose": "Relying party is requesting your CAR Document, CAR Receipt, and CCIR Document",
+ "format": {
+ "ldp_vc": {
+ "proof_type": [
+ "Ed25519Signature2020"
+ ]
+7
+ 
+}
+ },
+ "input_descriptors"
+:
+[
+ 
 {
-  "id": "age-verification-18-plus",
-  "input_descriptors": [
-    {
-      "id": "age_credential",
-      "format": {
-        "vc+sd-jwt": {
-          "sd-jwt_alg_values": ["ES256"]
-        }
-      },
-      "constraints": {
-        "fields": [
-          {
-            "path": ["$.ageOver18"],
-            "filter": {
-              "type": "boolean",
-              "const": true
-            }
-          }
-        ]
-      }
-    }
-  ]
+ "id"
+: "CAR Document"
+,
+ "format"
+:
+{
+ "ldp_vc"
+:
+{
+ "proof_type"
+:
+[
+ "Ed25519Signature2020"
+ 
+]
+ 
+}
+ },
+ "constraints"
+:
+{
+ "fields"
+:
+[
+ 
+{
+ "path"
+:
+[
+ "$.type"
+ ],
+ "filter"
+:
+{
+ "type"
+: "object"
+,
+ "pattern"
+: "CARDocument"
+ 
+}
+ 
+}
+ 
+]
+ 
+}
+ },
+ 
+{
+ "id"
+: "CAR Receipt"
+,
+ "format"
+:
+{
+ "ldp_vc"
+:
+{
+ "proof_type"
+:
+[
+ "Ed25519Signature2020"
+ 
+]
+ 
+}
+ },
+ "constraints"
+:
+{
+ "fields"
+:
+[
+ 
+{
+ "path"
+:
+[
+ "$.type"
+ ],
+ "filter"
+:
+{
+ "type"
+: "object"
+,
+ "pattern"
+: "CARReceipt"
+ 
+}
+ 
+}
+ 
+]
+ 
+}
+ },
+ 
+{
+ "id"
+: "CCIR"
+,
+ "format"
+:
+{
+ "ldp_vc"
+:
+{
+ "proof_type"
+:
+[
+ "Ed25519Signature2020"
+ 
+]
+ 
+}
+ },
+ "constraints"
+:
+{
+ "fields"
+:
+[
+8
+ {
+ "path": [
+ "$.type"
+ ],
+ "filter": {
+ "type": "object",
+ "pattern": "CCIR"
+ }
+ }
+ ]
+ }
+ }
 }
 ```
 
@@ -53,7 +184,7 @@ Esta é uma Presentation Definition **ilustrativa**. A definição exata depende
 <OpenID4VPVerification
   // ...
   presentationDefinition={{
-    id: 'age-verification-18-plus',
+    id: 'CCIR',
     input_descriptors: [/* ... */]
   }}
 />
@@ -61,12 +192,12 @@ Esta é uma Presentation Definition **ilustrativa**. A definição exata depende
 
 ### Opção 2 — Pré-cadastrada no Service
 
-Se a Presentation Definition estiver cadastrada no INJI Verify Service, use o ID:
+Se a Presentation Definition estiver cadastrada no INJI Verify Service, use o ID (pode ser qualquer um dos definidos acima):
 
 ```tsx
 <OpenID4VPVerification
   // ...
-  presentationDefinitionId="age-verification-18-plus"
+  presentationDefinitionId="CCIR"
 />
 ```
 

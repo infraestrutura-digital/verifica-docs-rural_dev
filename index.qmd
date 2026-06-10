@@ -44,5 +44,5 @@ Para **desenvolvedores** de aplicativos/sistemas de Bancos ou Agentes Financeiro
 ? Credenciais de acesso ao gateway (obtidas no [Onboarding](onboarding.qmd))
 
 ::: {.callout-note}
-O objetivo é que um desenvolvedor experiente consiga integrar em **1 dia**. Comece pelo [Integre rapidamente](quickstart.qmd).
+O objetivo é que um desenvolvedor experiente consiga integrar em **rapidamente**. Comece pelo [Integre rapidamente](quickstart.qmd).
 :::
