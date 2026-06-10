@@ -139,4 +139,4 @@ O SDK **não suporta** React Native, Angular, Vue ou SSR (Next.js). Para apps na
 
 ## Próximo passo
 
-Entenda a [Policy 18+](policy-credito-rural.qmd) e como configurar a Presentation Definition.
+Entenda a [Policy de Crédito Rural](policy-credito-rural.qmd) e como configurar a Presentation Definition.
