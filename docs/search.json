@@ -884,17 +884,17 @@
     "href": "index.html",
     "title": "Boas-vindas",
     "section": "",
-    "text": "O VerificaIdade é a solução nacional de verificação de idade (18+) baseada em credenciais verificáveis.\nEssa solução de governo é baseada na stack MOSIP INJI e funciona sobre o protocolo Open ID for Verifiable Credentials (OID4VC) que é interoperável com outras soluções e adotado por diversos países e organizações, estando já presente em forma experimental nos browsers Chrome e Safari mais recentes.",
+    "text": "O VerificaDocsCreditoRural é a solução para compartilhamento de documentos requeridos para crédito rural baseada em credenciais verificáveis.\nEssa solução de governo é baseada na stack MOSIP INJI e funciona sobre o protocolo Open ID for Verifiable Credentials (OID4VC) que é interoperável com outras soluções e adotado por diversos países e organizações, estando já presente em forma experimental nos browsers Chrome e Safari mais recentes.",
     "crumbs": [
       "Boas-vindas"
     ]
   },
   {
-    "objectID": "index.html#o-que-é-o-verificaidade",
-    "href": "index.html#o-que-é-o-verificaidade",
+    "objectID": "index.html#o-que-é-o-verificadocscreditorural",
+    "href": "index.html#o-que-é-o-verificadocscreditorural",
     "title": "Boas-vindas",
     "section": "",
-    "text": "O VerificaIdade é a solução nacional de verificação de idade (18+) baseada em credenciais verificáveis.\nEssa solução de governo é baseada na stack MOSIP INJI e funciona sobre o protocolo Open ID for Verifiable Credentials (OID4VC) que é interoperável com outras soluções e adotado por diversos países e organizações, estando já presente em forma experimental nos browsers Chrome e Safari mais recentes.",
+    "text": "O VerificaDocsCreditoRural é a solução para compartilhamento de documentos requeridos para crédito rural baseada em credenciais verificáveis.\nEssa solução de governo é baseada na stack MOSIP INJI e funciona sobre o protocolo Open ID for Verifiable Credentials (OID4VC) que é interoperável com outras soluções e adotado por diversos países e organizações, estando já presente em forma experimental nos browsers Chrome e Safari mais recentes.",
     "crumbs": [
       "Boas-vindas"
     ]
@@ -904,7 +904,7 @@
     "href": "index.html#para-quem-é-este-portal",
     "title": "Boas-vindas",
     "section": "Para quem é este portal?",
-    "text": "Para quem é este portal?\nPara desenvolvedores de Plataformas Digitais, web ou mobile apps que precisam verificar idade de acordo com o ECA Digital.",
+    "text": "Para quem é este portal?\nPara desenvolvedores de aplicativos/sistemas de Bancos ou Agentes Financeiros, web ou mobile apps que querem integrar compartilhamento digital de documentos para crédito rural de acordo com o padrão de Credenciais Verificáveis().",
     "crumbs": [
       "Boas-vindas"
     ]
@@ -924,7 +924,7 @@
     "href": "index.html#o-que-você-vai-encontrar-aqui",
     "title": "Boas-vindas",
     "section": "O que você vai encontrar aqui",
-    "text": "O que você vai encontrar aqui\n\n\n\nSeção\nO que resolve\n\n\n\n\nArquitetura em 1 Página\nVisão geral dos componentes\n\n\nIntegre em 1 Hora\nChecklist passo a passo\n\n\nSetup da VM e Docker\nPreparar a infraestrutura\n\n\nINJI Verify Service\nSubir o backend com Docker Compose\n\n\nFluxo de Verificação\nEntender o ciclo completo\n\n\nIntegração Web (QR Code)\nFluxo cross-device no desktop\n\n\nIntegração Mobile (Deep Link)\nFluxo same-device no celular\n\n\nPolicy 18+\nPresentation Definition de idade\n\n\nSegurança e LGPD\nBoas práticas\n\n\nProdução e Operação\nDeploy em produção\n\n\nAPI Reference\nEndpoints do INJI Verify Service\n\n\nTroubleshooting\nErros comuns\n\n\nOnboarding\nGateway e credenciamento",
+    "text": "O que você vai encontrar aqui\n\n\n\nSeção\nO que resolve\n\n\n\n\nArquitetura em 1 Página\nVisão geral dos componentes\n\n\nIntegre em 1 Hora\nChecklist passo a passo\n\n\nSetup da VM e Docker\nPreparar a infraestrutura\n\n\nINJI Verify Service\nSubir o backend com Docker Compose\n\n\nFluxo de Verificação\nEntender o ciclo completo\n\n\nIntegração Web (QR Code)\nFluxo cross-device no desktop\n\n\nIntegração Mobile (Deep Link)\nFluxo same-device no celular\n\n\nPolicy Documentos de Crédito Rural\nPresentation Definition de documentos CAF, CCIR, Recibo do CAR e Demonstrativo do CAR\n\n\nSegurança e LGPD\nBoas práticas\n\n\nProdução e Operação\nDeploy em produção\n\n\nAPI Reference\nEndpoints do INJI Verify Service\n\n\nTroubleshooting\nErros comuns\n\n\nOnboarding\nGateway e credenciamento",
     "crumbs": [
       "Boas-vindas"
     ]
