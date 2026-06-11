@@ -37,7 +37,7 @@
     "href": "troubleshooting.html#health-check-falha",
     "title": "Troubleshooting",
     "section": "Health check falha",
-    "text": "Health check falha\n\nSintoma\ncurl http://localhost:8080/v1/verify/health retorna erro ou timeout.\n\n\nDiagnóstico\ndocker ps | grep verify-service\ndocker logs verify-service --tail 20\n\n\nSoluções\n\nContainer não está rodando → docker compose up -d\nServiço ainda iniciando → aguardar 30-60 segundos (Spring Boot demora para iniciar)\nBanco inacessível → verificar se PostgreSQL está rodando",
+    "text": "Health check falha\n\nSintoma\ncurl http://localhost:8080/v1/verify/actuator/health retorna erro ou timeout.\n\n\nDiagnóstico\ndocker ps | grep verify-service\ndocker logs verify-service --tail 20\n\n\nSoluções\n\nContainer não está rodando → docker compose up -d\nServiço ainda iniciando → aguardar 30-60 segundos (Spring Boot demora para iniciar)\nBanco inacessível → verificar se PostgreSQL está rodando",
     "crumbs": [
       "Referência",
       "Troubleshooting"
@@ -290,7 +290,7 @@
     "href": "producao.html#monitoramento",
     "title": "Produção e Operação",
     "section": "Monitoramento",
-    "text": "Monitoramento\n\nHealth Check\ncurl -s https://verify.seu-dominio.com.br/v1/verify/health\n\n\nScript de monitoramento\n#!/bin/bash\n# monitor.sh — executar via cron a cada minuto\nHEALTH=$(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8080/v1/verify/health)\n\nif [ \"$HEALTH\" != \"200\" ]; then\n  echo \"$(date) ALERTA: INJI Verify Service indisponível (HTTP $HEALTH)\" \\\n    &gt;&gt; /var/log/verificaidade-monitor.log\nfi\n# Adicionar ao cron\ncrontab -e\n# * * * * * /home/ubuntu/monitor.sh",
+    "text": "Monitoramento\n\nHealth Check\ncurl -s https://verify.seu-dominio.com.br/v1/verify/actuator/health\n\n\nScript de monitoramento\n#!/bin/bash\n# monitor.sh — executar via cron a cada minuto\nHEALTH=$(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8080/v1/verify/actuator/health)\n\nif [ \"$HEALTH\" != \"200\" ]; then\n  echo \"$(date) ALERTA: INJI Verify Service indisponível (HTTP $HEALTH)\" \\\n    &gt;&gt; /var/log/verificaidade-monitor.log\nfi\n# Adicionar ao cron\ncrontab -e\n# * * * * * /home/ubuntu/monitor.sh",
     "crumbs": [
       "Referência",
       "Produção e Operação"
@@ -312,7 +312,7 @@
     "href": "producao.html#atualização-do-service",
     "title": "Produção e Operação",
     "section": "Atualização do Service",
-    "text": "Atualização do Service\ncd ~/verificaidade\ndocker compose -f docker-compose.prod.yml pull\ndocker compose -f docker-compose.prod.yml up -d\ncurl -s http://localhost:8080/v1/verify/health\n\n\n\n\n\n\nAviso\n\n\n\nTeste atualizações em ambiente de homologação antes de aplicar em produção.",
+    "text": "Atualização do Service\ncd ~/verificaidade\ndocker compose -f docker-compose.prod.yml pull\ndocker compose -f docker-compose.prod.yml up -d\ncurl -s http://localhost:8080/v1/verify/actuator/health\n\n\n\n\n\n\nAviso\n\n\n\nTeste atualizações em ambiente de homologação antes de aplicar em produção.",
     "crumbs": [
       "Referência",
       "Produção e Operação"
@@ -631,7 +631,7 @@
     "href": "inji-verify.html#passo-5-verificar-se-está-rodando",
     "title": "Subindo o INJI Verify Service",
     "section": "Passo 5 — Verificar se está rodando",
-    "text": "Passo 5 — Verificar se está rodando\n# Ver containers ativos\ndocker ps\n\n# Ver logs do Service\ndocker logs verify-service --tail 50\n\n# Health check\ncurl -s http://localhost:8080/v1/verify/health\nResultado esperado:\n{\n  \"status\": \"UP\"\n}",
+    "text": "Passo 5 — Verificar se está rodando\n# Ver containers ativos\ndocker ps\n\n# Ver logs do Service\ndocker logs verify-service --tail 50\n\n# Health check\ncurl -s http://localhost:8080/v1/verify/actuator/health\n\n**Resultado esperado:**\n\n```json\n{\n  \"status\": \"UP\"\n}",
     "crumbs": [
       "Infraestrutura",
       "Subindo o INJI Verify Service"
@@ -785,7 +785,7 @@
     "href": "api-reference.html#endpoints-do-inji-verify-service",
     "title": "API Reference",
     "section": "Endpoints do INJI Verify Service",
-    "text": "Endpoints do INJI Verify Service\n\nCriar VP Request\nInicia uma solicitação de verificação OpenID4VP.\nPOST &lt;VERIFY_BASE_URL&gt;/v1/verify/vp-request\nRequest Body:\n{\n  \"presentationDefinition\": {\n    \"id\": \"age-verification-18-plus\",\n    \"input_descriptors\": [\n      {\n        \"id\": \"age_credential\",\n        \"format\": {\n          \"vc+sd-jwt\": {\n            \"sd-jwt_alg_values\": [\"ES256\"]\n          }\n        },\n        \"constraints\": {\n          \"fields\": [\n            {\n              \"path\": [\"$.ageOver18\"],\n              \"filter\": {\n                \"type\": \"boolean\",\n                \"const\": true\n              }\n            }\n          ]\n        }\n      }\n    ]\n  }\n}\nResponse — 200 OK:\n{\n  \"requestId\": \"abc-123-def-456\",\n  \"authorizationUrl\": \"openid4vp://authorize?request_uri=https://...\"\n}\n\n\n\nConsultar Status da VP Request (Long-Polling)\nAguarda até que a Carteira Digital envie a credencial ou o timeout seja atingido.\nGET &lt;VERIFY_BASE_URL&gt;/v1/verify/vp-request/{requestId}/status\nO timeout padrão do long-polling é 55 segundos (configurável via INJI_VP_REQUEST_LONG_POLLING_TIMEOUT).\nResponse — 200 OK (credencial recebida):\n{\n  \"status\": \"COMPLETED\",\n  \"requestId\": \"abc-123-def-456\"\n}\nResponse — 200 OK (aguardando):\n{\n  \"status\": \"PENDING\",\n  \"requestId\": \"abc-123-def-456\"\n}\n\n\n\nObter Resultado da Verificação\nBusca o resultado completo após a Wallet ter submetido a credencial.\nGET &lt;VERIFY_BASE_URL&gt;/v1/verify/vp-result/{requestId}\nResponse — 200 OK:\n[\n  {\n    \"vc\": {\n      \"ageOver18\": true\n    },\n    \"vcStatus\": \"SUCCESS\"\n  }\n]\nValores possíveis de vcStatus:\n\n\n\nValor\nSignificado\n\n\n\n\nSUCCESS\nCredencial válida, policy satisfeita\n\n\nINVALID\nCredencial inválida (assinatura, emissor, formato)\n\n\nEXPIRED\nCredencial expirada\n\n\n\n\n\n\nVP Submission (Wallet → Service)\nEndpoint chamado pela Carteira Digital para enviar a credencial. Você não chama este endpoint diretamente.\nPOST &lt;VERIFY_BASE_URL&gt;/v1/verify/vp-submission\n\n\n\nVC Verification (QR Code Scan/Upload)\nPara o fluxo de QR Code scan/upload (não OpenID4VP), o SDK usa:\nPOST &lt;VERIFY_BASE_URL&gt;/v1/verify/vc-verification\n\n\n\nHealth Check\nGET &lt;VERIFY_BASE_URL&gt;/v1/verify/health\nResponse — 200 OK:\n{\n  \"status\": \"UP\"\n}",
+    "text": "Endpoints do INJI Verify Service\n\nCriar VP Request\nInicia uma solicitação de verificação OpenID4VP.\nPOST &lt;VERIFY_BASE_URL&gt;/v1/verify/vp-request\nRequest Body:\n{\n  \"presentationDefinition\": {\n    \"id\": \"age-verification-18-plus\",\n    \"input_descriptors\": [\n      {\n        \"id\": \"age_credential\",\n        \"format\": {\n          \"vc+sd-jwt\": {\n            \"sd-jwt_alg_values\": [\"ES256\"]\n          }\n        },\n        \"constraints\": {\n          \"fields\": [\n            {\n              \"path\": [\"$.ageOver18\"],\n              \"filter\": {\n                \"type\": \"boolean\",\n                \"const\": true\n              }\n            }\n          ]\n        }\n      }\n    ]\n  }\n}\nResponse — 200 OK:\n{\n  \"requestId\": \"abc-123-def-456\",\n  \"authorizationUrl\": \"openid4vp://authorize?request_uri=https://...\"\n}\n\n\n\nConsultar Status da VP Request (Long-Polling)\nAguarda até que a Carteira Digital envie a credencial ou o timeout seja atingido.\nGET &lt;VERIFY_BASE_URL&gt;/v1/verify/vp-request/{requestId}/status\nO timeout padrão do long-polling é 55 segundos (configurável via INJI_VP_REQUEST_LONG_POLLING_TIMEOUT).\nResponse — 200 OK (credencial recebida):\n{\n  \"status\": \"COMPLETED\",\n  \"requestId\": \"abc-123-def-456\"\n}\nResponse — 200 OK (aguardando):\n{\n  \"status\": \"PENDING\",\n  \"requestId\": \"abc-123-def-456\"\n}\n\n\n\nObter Resultado da Verificação\nBusca o resultado completo após a Wallet ter submetido a credencial.\nGET &lt;VERIFY_BASE_URL&gt;/v1/verify/vp-result/{requestId}\nResponse — 200 OK:\n[\n  {\n    \"vc\": {\n      \"ageOver18\": true\n    },\n    \"vcStatus\": \"SUCCESS\"\n  }\n]\nValores possíveis de vcStatus:\n\n\n\nValor\nSignificado\n\n\n\n\nSUCCESS\nCredencial válida, policy satisfeita\n\n\nINVALID\nCredencial inválida (assinatura, emissor, formato)\n\n\nEXPIRED\nCredencial expirada\n\n\n\n\n\n\nVP Submission (Wallet → Service)\nEndpoint chamado pela Carteira Digital para enviar a credencial. Você não chama este endpoint diretamente.\nPOST &lt;VERIFY_BASE_URL&gt;/v1/verify/vp-submission\n\n\n\nVC Verification (QR Code Scan/Upload)\nPara o fluxo de QR Code scan/upload (não OpenID4VP), o SDK usa:\nPOST &lt;VERIFY_BASE_URL&gt;/v1/verify/vc-verification\n\n\n\nHealth Check\nGET &lt;VERIFY_BASE_URL&gt;/v1/verify/actuator/health\nResponse — 200 OK:\n{\n  \"status\": \"UP\"\n}",
     "crumbs": [
       "Referência",
       "API Reference"
@@ -1318,7 +1318,7 @@
     "href": "quickstart.html#etapa-2-subir-inji-verify-service",
     "title": "Integre rapidamente",
     "section": "Etapa 2 — Subir INJI Verify Service",
-    "text": "Etapa 2 — Subir INJI Verify Service\nCrie o arquivo docker-compose.yml e suba os containers:\ndocker compose up -d\nVeja a configuração completa em Subindo o INJI Verify Service.\nResultado:\ncurl -s http://localhost:8080/v1/verify/health\n# { \"status\": \"UP\" }",
+    "text": "Etapa 2 — Subir INJI Verify Service\nCrie o arquivo docker-compose.yml e suba os containers:\ndocker compose up -d\nVeja a configuração completa em Subindo o INJI Verify Service.\nResultado:\ncurl -s http://localhost:8080/v1/verify/actuator/health\n# { \"status\": \"UP\" }",
     "crumbs": [
       "Início Rápido",
       "Integre rapidamente"
