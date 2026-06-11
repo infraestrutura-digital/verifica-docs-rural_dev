@@ -41,7 +41,7 @@ Veja a configuração completa em [Subindo o INJI Verify Service](inji-verify.qm
 **Resultado:**
 
 ```bash
-curl -s http://localhost:8080/v1/verify/health
+curl -s http://localhost:8080/v1/verify/actuator/health
 # { "status": "UP" }
 ```
 

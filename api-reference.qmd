@@ -146,7 +146,7 @@ POST <VERIFY_BASE_URL>/v1/verify/vc-verification
 ### Health Check
 
 ```
-GET <VERIFY_BASE_URL>/v1/verify/health
+GET <VERIFY_BASE_URL>/v1/verify/actuator/health
 ```
 
 **Response — 200 OK:**

@@ -35,7 +35,7 @@ docker stats --no-stream
 ## Health check falha
 
 ### Sintoma
-`curl http://localhost:8080/v1/verify/health` retorna erro ou timeout.
+`curl http://localhost:8080/v1/verify/actuator/health` retorna erro ou timeout.
 
 ### Diagnóstico
 

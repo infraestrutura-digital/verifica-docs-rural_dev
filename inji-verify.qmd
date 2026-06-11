@@ -110,8 +110,7 @@ docker ps
 docker logs verify-service --tail 50
 
 # Health check
-curl -s http://localhost:8080/v1/verify/health
-```
+curl -s http://localhost:8080/v1/verify/actuator/health
 
 **Resultado esperado:**
 

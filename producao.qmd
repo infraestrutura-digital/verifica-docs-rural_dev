@@ -137,7 +137,7 @@ sudo certbot --nginx -d verify.seu-dominio.com.br
 ### Health Check
 
 ```bash
-curl -s https://verify.seu-dominio.com.br/v1/verify/health
+curl -s https://verify.seu-dominio.com.br/v1/verify/actuator/health
 ```
 
 ### Script de monitoramento
@@ -145,7 +145,7 @@ curl -s https://verify.seu-dominio.com.br/v1/verify/health
 ```bash
 #!/bin/bash
 # monitor.sh — executar via cron a cada minuto
-HEALTH=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/v1/verify/health)
+HEALTH=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/v1/verify/actuator/health)
 
 if [ "$HEALTH" != "200" ]; then
   echo "$(date) ALERTA: INJI Verify Service indisponível (HTTP $HEALTH)" \
@@ -179,7 +179,7 @@ find $BACKUP_DIR -name "*.sql.gz" -mtime +7 -delete
 cd ~/verificaidade
 docker compose -f docker-compose.prod.yml pull
 docker compose -f docker-compose.prod.yml up -d
-curl -s http://localhost:8080/v1/verify/health
+curl -s http://localhost:8080/v1/verify/actuator/health
 ```
 
 ::: {.callout-warning}
