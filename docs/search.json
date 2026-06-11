@@ -598,7 +598,7 @@
     "href": "inji-verify.html#passo-2-obter-scripts-de-inicialização-do-banco",
     "title": "Subindo o INJI Verify Service",
     "section": "Passo 2 — Obter scripts de inicialização do banco",
-    "text": "Passo 2 — Obter scripts de inicialização do banco\nOs scripts SQL de inicialização do schema estão no repositório oficial do INJI Verify. Copie-os para db-init/:\n# Substitua pela URL do repositório oficial\n# Os scripts criam o schema 'verify' e as tabelas necessárias\n\n\n\n\n\n\nAviso\n\n\n\nO spring.jpa.hibernate.ddl-auto=none significa que o banco não é criado automaticamente. Você precisa dos scripts de inicialização.",
+    "text": "Passo 2 — Obter scripts de inicialização do banco\nOs scripts SQL de inicialização do schema estão no repositório oficial do INJI Verify. Copie-os para db-init/:\n# Os scripts criam o schema 'verify' e as tabelas necessárias\n# Substitua pela URL do repositório oficial\n\ncurl -o db-init/init.sql https://github.com/inji/inji-verify/blob/master/docker-compose/db-init/init.sql\n\n\n\n\n\n\nAviso\n\n\n\nO spring.jpa.hibernate.ddl-auto=none significa que o banco não é criado automaticamente. Você precisa dos scripts de inicialização.",
     "crumbs": [
       "Infraestrutura",
       "Subindo o INJI Verify Service"

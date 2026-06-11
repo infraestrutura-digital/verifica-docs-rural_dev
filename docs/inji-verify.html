@@ -389,8 +389,10 @@ Nota
 <section id="passo-2-obter-scripts-de-inicialização-do-banco" class="level2">
 <h2 class="anchored" data-anchor-id="passo-2-obter-scripts-de-inicialização-do-banco">Passo 2 — Obter scripts de inicialização do banco</h2>
 <p>Os scripts SQL de inicialização do schema estão no repositório oficial do INJI Verify. Copie-os para <code>db-init/</code>:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Substitua pela URL do repositório oficial</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Os scripts criam o schema 'verify' e as tabelas necessárias</span></span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Os scripts criam o schema 'verify' e as tabelas necessárias</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Substitua pela URL do repositório oficial</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-o</span> db-init/init.sql https://github.com/inji/inji-verify/blob/master/docker-compose/db-init/init.sql</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">

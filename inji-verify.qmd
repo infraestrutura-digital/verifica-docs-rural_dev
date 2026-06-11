@@ -32,8 +32,11 @@ cd ~/verificaidade
 Os scripts SQL de inicialização do schema estão no repositório oficial do INJI Verify. Copie-os para `db-init/`:
 
 ```bash
-# Substitua pela URL do repositório oficial
 # Os scripts criam o schema 'verify' e as tabelas necessárias
+# Substitua pela URL do repositório oficial
+
+curl -o db-init/init.sql https://github.com/inji/inji-verify/blob/master/docker-compose/db-init/init.sql
+
 ```
 
 ::: {.callout-warning}
