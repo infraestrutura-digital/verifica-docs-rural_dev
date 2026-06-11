@@ -299,7 +299,7 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="objetivo" class="level2">
 <h2 class="anchored" data-anchor-id="objetivo">Objetivo</h2>
-<p>Implementar credencial verificável em um app web mobile usando Deep Link (fluxo same-device).</p>
+<p>Implementar uso de credenciais verificáveis em um app web mobile usando Deep Link (fluxo same-device).</p>
 </section>
 <section id="fluxo-mobile" class="level2">
 <h2 class="anchored" data-anchor-id="fluxo-mobile">Fluxo Mobile</h2>
@@ -314,7 +314,7 @@ ul.task-list li input[type="checkbox"] {
     participant VS as INJI Verify Service
     participant W as Carteira Digital
 
-    U-&gt;&gt;SDK: Toca "Verificar Idade"
+    U-&gt;&gt;SDK: Toca "Verificar Documentos de Crédito Rural"
     SDK-&gt;&gt;VS: POST /v1/verify/vp-request
     VS--&gt;&gt;SDK: requestId + authorizationUrl
     SDK-&gt;&gt;W: Redireciona via Deep Link (openid4vp://...)
@@ -345,11 +345,11 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="passo-1-o-mesmo-componente-funciona" class="level2">
 <h2 class="anchored" data-anchor-id="passo-1-o-mesmo-componente-funciona">Passo 1 — O mesmo componente funciona</h2>
-<pre class="tsx"><code>// src/components/VerificaIdade.tsx
+<pre class="tsx"><code>// src/components/VerificaDocsCredito.tsx
 // O MESMO código da integração Web funciona no mobile!
 import { OpenID4VPVerification } from '@mosip/react-inji-verify-sdk';
 
-export function VerificaIdade() {
+export function VerificaDocsCredito() {
   return (
     &lt;OpenID4VPVerification
       verifyServiceUrl="&lt;VERIFY_BASE_URL&gt;/v1/verify"
@@ -426,7 +426,7 @@ Nota
   // ...
   onError={(error) =&gt; {
     // Informar o usuário para instalar a Carteira Digital
-    alert('Instale a Carteira Digital para verificar sua idade.');
+    alert('Instale a Carteira Digital para verificar seus documentos de Crédito Rural.');
   }}
 /&gt;</code></pre>
 </section>

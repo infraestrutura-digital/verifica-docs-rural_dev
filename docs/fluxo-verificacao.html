@@ -310,16 +310,16 @@ ul.task-list li input[type="checkbox"] {
     participant VS as INJI Verify Service
     participant W as Carteira Digital (Celular)
 
-    U-&gt;&gt;SDK: Clica "Verificar Idade"
+    U-&gt;&gt;SDK: Clica "Verificar Documentos de Crédito Rural"
     SDK-&gt;&gt;VS: POST /v1/verify/vp-request
     VS--&gt;&gt;SDK: requestId + authorizationUrl
     SDK-&gt;&gt;U: Exibe QR Code (authorizationUrl)
     U-&gt;&gt;W: Escaneia QR Code com a Carteira
     W-&gt;&gt;VS: Apresenta credencial (VP submission)
-    VS-&gt;&gt;VS: Valida credencial + policy 18+
+    VS-&gt;&gt;VS: Valida credencial + CCIR + CAF + Recibo CAR + Demonstrativo CAR
     Note over SDK,VS: SDK faz long-polling em /vp-request/{id}/status
     VS--&gt;&gt;SDK: Resultado da verificação
-    SDK-&gt;&gt;U: "Idade verificada!" (callback)
+    SDK-&gt;&gt;U: "Documentos verificados!" (callback)
 </pre>
 </div>
 <p></p></figure><p></p>
@@ -340,7 +340,7 @@ ul.task-list li input[type="checkbox"] {
     participant VS as INJI Verify Service
     participant W as Carteira Digital
 
-    U-&gt;&gt;SDK: Toca "Verificar Idade"
+    U-&gt;&gt;SDK: Toca "Verificar Documentos de Crédito Rural"
     SDK-&gt;&gt;VS: POST /v1/verify/vp-request
     VS--&gt;&gt;SDK: requestId + authorizationUrl
     SDK-&gt;&gt;W: Abre Deep Link (openid4vp://...)
@@ -348,7 +348,7 @@ ul.task-list li input[type="checkbox"] {
     Note over W: Usuário volta ao app
     SDK-&gt;&gt;VS: Long-polling /vp-request/{id}/status
     VS--&gt;&gt;SDK: Resultado da verificação
-    SDK-&gt;&gt;U: "Idade verificada!" (callback)
+    SDK-&gt;&gt;U: "Documentos verificados!" (callback)
 </pre>
 </div>
 <p></p></figure><p></p>

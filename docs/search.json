@@ -59,7 +59,7 @@
     "href": "troubleshooting.html#qr-code-não-funciona",
     "title": "Troubleshooting",
     "section": "QR Code não funciona",
-    "text": "QR Code não funciona\n\nSintoma\nUsuário escaneia o QR Code mas a Carteira Digital não responde.\n\n\nCausas e soluções\n\n\n\n\n\n\n\nCausa\nSolução\n\n\n\n\nCarteira Digital não instalada\nOrientar o usuário a instalar a INJI Wallet\n\n\nINJI Verify Service inacessível pelo celular\nVerificar que INJI_VP_SUBMISSION_BASE_URL é um domínio público\n\n\nDID não resolve\nVerificar INJI_DID_VERIFY_URI corresponde ao domínio público\n\n\nURL expirada\nSessão expirou; iniciar nova verificação\n\n\nUsando localhost\nEm desenvolvimento, use ngrok ou túnel equivalente\n\n\n\n\n\n\n\n\n\nImportante\n\n\n\nA causa mais comum é INJI_VP_SUBMISSION_BASE_URL apontando para localhost. A Carteira Digital no celular não consegue acessar localhost do seu computador.",
+    "text": "QR Code não funciona\n\nSintoma\nUsuário escaneia o QR Code mas a Carteira Digital não responde.\n\n\nCausas e soluções\n\n\n\n\n\n\n\nCausa\nSolução\n\n\n\n\nCarteira Digital não instalada\nOrientar o usuário a instalar a Carteira Digital\n\n\nINJI Verify Service inacessível pelo celular\nVerificar que INJI_VP_SUBMISSION_BASE_URL é um domínio público\n\n\nDID não resolve\nVerificar INJI_DID_VERIFY_URI corresponde ao domínio público\n\n\nURL expirada\nSessão expirou; iniciar nova verificação\n\n\nUsando localhost\nEm desenvolvimento, use ngrok ou túnel equivalente\n\n\n\n\n\n\n\n\n\nImportante\n\n\n\nA causa mais comum é INJI_VP_SUBMISSION_BASE_URL apontando para localhost. A Carteira Digital no celular não consegue acessar localhost do seu computador.",
     "crumbs": [
       "Referência",
       "Troubleshooting"
@@ -70,7 +70,7 @@
     "href": "troubleshooting.html#deep-link-não-abre-a-carteira-mobile",
     "title": "Troubleshooting",
     "section": "Deep Link não abre a Carteira (Mobile)",
-    "text": "Deep Link não abre a Carteira (Mobile)\n\nSintoma\nNo celular, o link openid4vp://... não abre nada.\n\n\nSoluções\n\nINJI Wallet não instalada → instalar a Carteira Digital\nNavegador bloqueia o scheme → testar em Chrome/Safari\nApp não registrou o scheme → verificar se a versão da Wallet suporta openid4vp://",
+    "text": "Deep Link não abre a Carteira (Mobile)\n\nSintoma\nNo celular, o link openid4vp://... não abre nada.\n\n\nSoluções\n\nCarteira Digital não instalada → instalar a Carteira Digital\nNavegador bloqueia o scheme → testar em Chrome/Safari\nApp não registrou o scheme → verificar se a versão da Wallet suporta openid4vp://",
     "crumbs": [
       "Referência",
       "Troubleshooting"
@@ -147,7 +147,7 @@
     "href": "seguranca-lgpd.html#princípios",
     "title": "Segurança e LGPD",
     "section": "Princípios",
-    "text": "Princípios\n\n\n\n\n\n\n\nPrincípio\nAplicação\n\n\n\n\nMinimização de dados\nCom SD-JWT, o cidadão revela apenas ageOver18, não a data de nascimento\n\n\nFinalidade\nUse o resultado apenas para controle de acesso por idade\n\n\nNão armazenamento\nNão armazene a credencial do cidadão\n\n\nTransparência\nInforme ao usuário o que está sendo verificado",
+    "text": "Princípios\n\n\n\n\n\n\n\nPrincípio\nAplicação\n\n\n\n\nMinimização de dados\nCom SD-JWT, o cidadão revela apenas CCIR, CAF, Recibo do CAR, Demonstrativo do CAR, nada além disso\n\n\nFinalidade\nUse o resultado apenas para fins de análise de crédito rural\n\n\nNão armazenamento\nNão armazene a credencial do cidadão\n\n\nTransparência\nInforme ao usuário o que está sendo verificado",
     "crumbs": [
       "Referência",
       "Segurança e LGPD"
@@ -202,7 +202,7 @@
     "href": "seguranca-lgpd.html#consentimento-do-usuário",
     "title": "Segurança e LGPD",
     "section": "Consentimento do Usuário",
-    "text": "Consentimento do Usuário\nAntes de iniciar a verificação, informe ao usuário:\n\nO que está sendo verificado (idade &gt;= 18)\nQuem é o verificador (sua organização)\nQue nenhum dado pessoal além de ageOver18 é compartilhado\nQue o cidadão autoriza ativamente na Carteira Digital",
+    "text": "Consentimento do Usuário\nAntes de iniciar a verificação, informe ao usuário:\n\nO que está sendo verificado (documentos de crédito rural)\nQuem é o verificador (sua organização)\nQue nenhum dado pessoal além de CCIR, CAF, Recibo do CAR, Demonstrativo do CAR é compartilhado\nQue o cidadão autoriza ativamente na Carteira Digital",
     "crumbs": [
       "Referência",
       "Segurança e LGPD"
@@ -268,7 +268,7 @@
     "href": "producao.html#nginx-como-reverse-proxy",
     "title": "Produção e Operação",
     "section": "Nginx como Reverse Proxy",
-    "text": "Nginx como Reverse Proxy\n# /etc/nginx/sites-available/verificaidade\nserver {\n    listen 443 ssl;\n    server_name verify.seu-dominio.com.br;\n\n    ssl_certificate /etc/letsencrypt/live/verify.seu-dominio.com.br/fullchain.pem;\n    ssl_certificate_key /etc/letsencrypt/live/verify.seu-dominio.com.br/privkey.pem;\n\n    # INJI Verify Service\n    location /v1/verify/ {\n        proxy_pass http://localhost:8080/v1/verify/;\n        proxy_set_header Host $host;\n        proxy_set_header X-Real-IP $remote_addr;\n        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n        proxy_set_header X-Forwarded-Proto $scheme;\n\n        # Long-polling precisa de timeout maior\n        proxy_read_timeout 60s;\n    }\n}\n\nserver {\n    listen 80;\n    server_name verify.seu-dominio.com.br;\n    return 301 https://$server_name$request_uri;\n}\nsudo ln -s /etc/nginx/sites-available/verificaidade /etc/nginx/sites-enabled/\nsudo nginx -t\nsudo systemctl reload nginx",
+    "text": "Nginx como Reverse Proxy\n# /etc/nginx/sites-available/verificadocscredito\nserver {\n    listen 443 ssl;\n    server_name verify.seu-dominio.com.br;\n\n    ssl_certificate /etc/letsencrypt/live/verify.seu-dominio.com.br/fullchain.pem;\n    ssl_certificate_key /etc/letsencrypt/live/verify.seu-dominio.com.br/privkey.pem;\n\n    # INJI Verify Service\n    location /v1/verify/ {\n        proxy_pass http://localhost:8080/v1/verify/;\n        proxy_set_header Host $host;\n        proxy_set_header X-Real-IP $remote_addr;\n        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n        proxy_set_header X-Forwarded-Proto $scheme;\n\n        # Long-polling precisa de timeout maior\n        proxy_read_timeout 60s;\n    }\n}\n\nserver {\n    listen 80;\n    server_name verify.seu-dominio.com.br;\n    return 301 https://$server_name$request_uri;\n}\nsudo ln -s /etc/nginx/sites-available/verificadocscredito /etc/nginx/sites-enabled/\nsudo nginx -t\nsudo systemctl reload nginx",
     "crumbs": [
       "Referência",
       "Produção e Operação"
@@ -290,7 +290,7 @@
     "href": "producao.html#monitoramento",
     "title": "Produção e Operação",
     "section": "Monitoramento",
-    "text": "Monitoramento\n\nHealth Check\ncurl -s https://verify.seu-dominio.com.br/v1/verify/actuator/health\n\n\nScript de monitoramento\n#!/bin/bash\n# monitor.sh — executar via cron a cada minuto\nHEALTH=$(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8080/v1/verify/actuator/health)\n\nif [ \"$HEALTH\" != \"200\" ]; then\n  echo \"$(date) ALERTA: INJI Verify Service indisponível (HTTP $HEALTH)\" \\\n    &gt;&gt; /var/log/verificaidade-monitor.log\nfi\n# Adicionar ao cron\ncrontab -e\n# * * * * * /home/ubuntu/monitor.sh",
+    "text": "Monitoramento\n\nHealth Check\ncurl -s https://verify.seu-dominio.com.br/v1/verify/actuator/health\n\n\nScript de monitoramento\n#!/bin/bash\n# monitor.sh — executar via cron a cada minuto\nHEALTH=$(curl -s -o /dev/null -w \"%{http_code}\" http://localhost:8080/v1/verify/actuator/health)\n\nif [ \"$HEALTH\" != \"200\" ]; then\n  echo \"$(date) ALERTA: INJI Verify Service indisponível (HTTP $HEALTH)\" \\\n    &gt;&gt; /var/log/verificadocscredito-monitor.log\nfi\n# Adicionar ao cron\ncrontab -e\n# * * * * * /home/ubuntu/monitor.sh",
     "crumbs": [
       "Referência",
       "Produção e Operação"
@@ -433,7 +433,7 @@
     "href": "integra-web.html",
     "title": "Integração Web (QR Code)",
     "section": "",
-    "text": "Implementar credencial verificável em uma aplicação Web React usando QR Code (fluxo cross-device).",
+    "text": "Implementar uso de credenciais verificáveis em uma aplicação Web React usando QR Code (fluxo cross-device).",
     "crumbs": [
       "Integração",
       "Integração Web (QR Code)"
@@ -444,7 +444,7 @@
     "href": "integra-web.html#objetivo",
     "title": "Integração Web (QR Code)",
     "section": "",
-    "text": "Implementar credencial verificável em uma aplicação Web React usando QR Code (fluxo cross-device).",
+    "text": "Implementar uso de credenciais verificáveis em uma aplicação Web React usando QR Code (fluxo cross-device).",
     "crumbs": [
       "Integração",
       "Integração Web (QR Code)"
@@ -455,7 +455,7 @@
     "href": "integra-web.html#fluxo-web",
     "title": "Integração Web (QR Code)",
     "section": "Fluxo Web",
-    "text": "Fluxo Web\n\n\n\n\n\nsequenceDiagram\n    participant U as Usuário (Desktop)\n    participant SDK as App React + SDK\n    participant VS as INJI Verify Service\n    participant W as Carteira Digital (Celular)\n\n    U-&gt;&gt;SDK: Clica \"Verificar Idade\"\n    SDK-&gt;&gt;VS: POST /v1/verify/vp-request\n    VS--&gt;&gt;SDK: requestId + authorizationUrl\n    SDK-&gt;&gt;U: Renderiza QR Code\n    U-&gt;&gt;W: Escaneia QR Code\n    W-&gt;&gt;VS: POST /v1/verify/vp-submission (credencial)\n    VS-&gt;&gt;VS: Valida credencial\n    Note over SDK,VS: Long-polling /vp-request/{id}/status\n    VS--&gt;&gt;SDK: Resultado\n    SDK-&gt;&gt;U: Callback executado",
+    "text": "Fluxo Web\n\n\n\n\n\nsequenceDiagram\n    participant U as Usuário (Desktop)\n    participant SDK as App React + SDK\n    participant VS as INJI Verify Service\n    participant W as Carteira Digital (Celular)\n\n    U-&gt;&gt;SDK: Clica \"Verificar Documentos de Crédito Rural\"\n    SDK-&gt;&gt;VS: POST /v1/verify/vp-request\n    VS--&gt;&gt;SDK: requestId + authorizationUrl\n    SDK-&gt;&gt;U: Renderiza QR Code\n    U-&gt;&gt;W: Escaneia QR Code\n    W-&gt;&gt;VS: POST /v1/verify/vp-submission (credencial)\n    VS-&gt;&gt;VS: Valida credencial\n    Note over SDK,VS: Long-polling /vp-request/{id}/status\n    VS--&gt;&gt;SDK: Resultado\n    SDK-&gt;&gt;U: Callback executado",
     "crumbs": [
       "Integração",
       "Integração Web (QR Code)"
@@ -488,7 +488,7 @@
     "href": "integra-web.html#passo-2-componente-de-verificação",
     "title": "Integração Web (QR Code)",
     "section": "Passo 2 — Componente de verificação",
-    "text": "Passo 2 — Componente de verificação\n// src/components/VerificaIdade.tsx\nimport { useState } from 'react';\nimport { OpenID4VPVerification } from '@mosip/react-inji-verify-sdk';\n\n// Substitua pelo valor do seu ambiente\nconst VERIFY_SERVICE_URL = '&lt;VERIFY_BASE_URL&gt;/v1/verify';\nconst CLIENT_ID_DID = 'did:web:&lt;SEU_DOMINIO&gt;:v1:verify';\n\n// Substitua pela Presentation Definition do seu credenciamento\nconst presentationDefinition = {\n  id: 'age-verification-18-plus',\n  input_descriptors: [\n    {\n      id: 'age_credential',\n      format: {\n        'vc+sd-jwt': {\n          'sd-jwt_alg_values': ['ES256']\n        }\n      },\n      constraints: {\n        fields: [\n          {\n            path: ['$.ageOver18'],\n            filter: {\n              type: 'boolean',\n              const: true\n            }\n          }\n        ]\n      }\n    }\n  ]\n};\n\ntype VerificaIdadeProps = {\n  onVerificado: () =&gt; void;\n  onFalhou: () =&gt; void;\n};\n\nexport function VerificaIdade({ onVerificado, onFalhou }: VerificaIdadeProps) {\n  const [estado, setEstado] = useState&lt;'idle' | 'verificado' | 'falhou'&gt;('idle');\n\n  return (\n    &lt;div&gt;\n      {estado === 'idle' && (\n        &lt;OpenID4VPVerification\n          verifyServiceUrl={VERIFY_SERVICE_URL}\n          clientId={CLIENT_ID_DID}\n          protocol=\"openid4vp://\"\n          presentationDefinition={presentationDefinition}\n          onVpProcessed={(results) =&gt; {\n            const ok = results.some(r =&gt; r.vcStatus === 'SUCCESS');\n            if (ok) {\n              setEstado('verificado');\n              onVerificado();\n            } else {\n              setEstado('falhou');\n              onFalhou();\n            }\n          }}\n          onError={(error) =&gt; {\n            console.error('Erro na verificação:', error);\n            setEstado('falhou');\n            onFalhou();\n          }}\n          onQrCodeExpired={() =&gt; {\n            console.log('QR Code expirou');\n          }}\n        /&gt;\n      )}\n\n      {estado === 'verificado' && (\n        &lt;p&gt;Idade verificada com sucesso.&lt;/p&gt;\n      )}\n\n      {estado === 'falhou' && (\n        &lt;div&gt;\n          &lt;p&gt;Verificação falhou.&lt;/p&gt;\n          &lt;button onClick={() =&gt; setEstado('idle')}&gt;Tentar novamente&lt;/button&gt;\n        &lt;/div&gt;\n      )}\n    &lt;/div&gt;\n  );\n}",
+    "text": "Passo 2 — Componente de verificação\n// src/components/VerificaDocsCredito.tsx\nimport { useState } from 'react';\nimport { OpenID4VPVerification } from '@mosip/react-inji-verify-sdk';\n\n// Substitua pelo valor do seu ambiente\nconst VERIFY_SERVICE_URL = '&lt;VERIFY_BASE_URL&gt;/v1/verify';\nconst CLIENT_ID_DID = 'did:web:&lt;SEU_DOMINIO&gt;:v1:verify';\n\n// Substitua pela Presentation Definition do seu credenciamento\nconst presentationDefinition = {\n  id: 'CCIR',\n  input_descriptors: [\n    {\n      id: 'ccir',\n      format: {\n        'vc+sd-jwt': {\n          'sd-jwt_alg_values': ['ES256']\n        }\n      },\n      constraints: {\n        fields: [\n          {\n            path: ['$.id'],\n            filter: {\n              type: 'string',\n              const: \"&lt;id&gt;\"\n            }\n          }\n        ]\n      }\n    }\n  ]\n};\n\ntype VerificaDocsCreditoProps = {\n  onVerificado: () =&gt; void;\n  onFalhou: () =&gt; void;\n};\n\nexport function VerificaDocsCredito({ onVerificado, onFalhou }: VerificaDocsCreditoProps) {\n  const [estado, setEstado] = useState&lt;'idle' | 'verificado' | 'falhou'&gt;('idle');\n\n  return (\n    &lt;div&gt;\n      {estado === 'idle' && (\n        &lt;OpenID4VPVerification\n          verifyServiceUrl={VERIFY_SERVICE_URL}\n          clientId={CLIENT_ID_DID}\n          protocol=\"openid4vp://\"\n          presentationDefinition={presentationDefinition}\n          onVpProcessed={(results) =&gt; {\n            const ok = results.some(r =&gt; r.vcStatus === 'SUCCESS');\n            if (ok) {\n              setEstado('verificado');\n              onVerificado();\n            } else {\n              setEstado('falhou');\n              onFalhou();\n            }\n          }}\n          onError={(error) =&gt; {\n            console.error('Erro na verificação:', error);\n            setEstado('falhou');\n            onFalhou();\n          }}\n          onQrCodeExpired={() =&gt; {\n            console.log('QR Code expirou');\n          }}\n        /&gt;\n      )}\n\n      {estado === 'verificado' && (\n        &lt;p&gt;Documentos verificados com sucesso.&lt;/p&gt;\n      )}\n\n      {estado === 'falhou' && (\n        &lt;div&gt;\n          &lt;p&gt;Verificação falhou.&lt;/p&gt;\n          &lt;button onClick={() =&gt; setEstado('idle')}&gt;Tentar novamente&lt;/button&gt;\n        &lt;/div&gt;\n      )}\n    &lt;/div&gt;\n  );\n}",
     "crumbs": [
       "Integração",
       "Integração Web (QR Code)"
@@ -499,7 +499,7 @@
     "href": "integra-web.html#passo-3-usar-o-componente",
     "title": "Integração Web (QR Code)",
     "section": "Passo 3 — Usar o componente",
-    "text": "Passo 3 — Usar o componente\n// src/pages/Checkout.tsx\nimport { VerificaIdade } from '../components/VerificaIdade';\n\nexport function Checkout() {\n  return (\n    &lt;div&gt;\n      &lt;h1&gt;Verificação de Idade&lt;/h1&gt;\n      &lt;VerificaIdade\n        onVerificado={() =&gt; console.log('Acesso liberado')}\n        onFalhou={() =&gt; console.log('Acesso negado')}\n      /&gt;\n    &lt;/div&gt;\n  );\n}",
+    "text": "Passo 3 — Usar o componente\n// src/pages/Checkout.tsx\nimport { VerificaDocsCredito } from '../components/VerificaDocsCredito';\n\nexport function Checkout() {\n  return (\n    &lt;div&gt;\n      &lt;h1&gt;Verificação de Documentos de Crédito Rural&lt;/h1&gt;\n      &lt;VerificaIdade\n        onVerificado={() =&gt; console.log('Acesso liberado')}\n        onFalhou={() =&gt; console.log('Acesso negado')}\n      /&gt;\n    &lt;/div&gt;\n  );\n}",
     "crumbs": [
       "Integração",
       "Integração Web (QR Code)"
@@ -510,7 +510,7 @@
     "href": "integra-web.html#versão-para-produção-com-onvpreceived",
     "title": "Integração Web (QR Code)",
     "section": "Versão para produção (com onVpReceived)",
-    "text": "Versão para produção (com onVpReceived)\nEm produção, use onVpReceived para buscar o resultado no backend:\n// src/components/VerificaIdadeProd.tsx\nimport { OpenID4VPVerification } from '@mosip/react-inji-verify-sdk';\n\nexport function VerificaIdadeProd() {\n  const handleVpReceived = async (txnId: string) =&gt; {\n    // Buscar resultado no seu backend\n    const res = await fetch(`/api/verificacao/resultado/${txnId}`);\n    const data = await res.json();\n\n    if (data.verified) {\n      // Liberar acesso\n    } else {\n      // Negar acesso\n    }\n  };\n\n  return (\n    &lt;OpenID4VPVerification\n      verifyServiceUrl=\"&lt;VERIFY_BASE_URL&gt;/v1/verify\"\n      clientId=\"did:web:&lt;SEU_DOMINIO&gt;:v1:verify\"\n      protocol=\"openid4vp://\"\n      presentationDefinition={presentationDefinition}\n      onVpReceived={handleVpReceived}\n      onError={(error) =&gt; console.error(error)}\n      onQrCodeExpired={() =&gt; console.log('QR expirou')}\n    /&gt;\n  );\n}\n\n\n\n\n\n\nImportante\n\n\n\nNessa abordagem, seu backend busca o resultado em GET &lt;VERIFY_BASE_URL&gt;/v1/verify/vp-result/{txnId} e decide se libera o acesso. Isso evita que o frontend seja adulterado.",
+    "text": "Versão para produção (com onVpReceived)\nEm produção, use onVpReceived para buscar o resultado no backend:\n// src/components/VerificaDocsCreditoProd.tsx\nimport { OpenID4VPVerification } from '@mosip/react-inji-verify-sdk';\n\nexport function VerificaDocsCreditoProd() {\n  const handleVpReceived = async (txnId: string) =&gt; {\n    // Buscar resultado no seu backend\n    const res = await fetch(`/api/verificacao/resultado/${txnId}`);\n    const data = await res.json();\n\n    if (data.verified) {\n      // Liberar acesso\n    } else {\n      // Negar acesso\n    }\n  };\n\n  return (\n    &lt;OpenID4VPVerification\n      verifyServiceUrl=\"&lt;VERIFY_BASE_URL&gt;/v1/verify\"\n      clientId=\"did:web:&lt;SEU_DOMINIO&gt;:v1:verify\"\n      protocol=\"openid4vp://\"\n      presentationDefinition={presentationDefinition}\n      onVpReceived={handleVpReceived}\n      onError={(error) =&gt; console.error(error)}\n      onQrCodeExpired={() =&gt; console.log('QR expirou')}\n    /&gt;\n  );\n}\n\n\n\n\n\n\nImportante\n\n\n\nNessa abordagem, seu backend busca o resultado em GET &lt;VERIFY_BASE_URL&gt;/v1/verify/vp-result/{txnId} e decide se libera o acesso. Isso evita que o frontend seja adulterado.",
     "crumbs": [
       "Integração",
       "Integração Web (QR Code)"
@@ -521,7 +521,7 @@
     "href": "integra-web.html#customização-do-qr-code",
     "title": "Integração Web (QR Code)",
     "section": "Customização do QR Code",
-    "text": "Customização do QR Code\n&lt;OpenID4VPVerification\n  // ...\n  qrCodeStyles={{\n    size: 300,\n    bgColor: '#ffffff',\n    fgColor: '#000000',\n  }}\n  triggerElement={&lt;button className=\"btn-verificar\"&gt;Verificar Idade&lt;/button&gt;}\n/&gt;",
+    "text": "Customização do QR Code\n&lt;OpenID4VPVerification\n  // ...\n  qrCodeStyles={{\n    size: 300,\n    bgColor: '#ffffff',\n    fgColor: '#000000',\n  }}\n  triggerElement={&lt;button className=\"btn-verificar\"&gt;Verificar Documentos de Crédito Rural&lt;/button&gt;}\n/&gt;",
     "crumbs": [
       "Integração",
       "Integração Web (QR Code)"
@@ -587,7 +587,7 @@
     "href": "inji-verify.html#passo-1-criar-estrutura-de-diretórios",
     "title": "Subindo o INJI Verify Service",
     "section": "Passo 1 — Criar estrutura de diretórios",
-    "text": "Passo 1 — Criar estrutura de diretórios\nmkdir -p ~/verificaidade/db-init\ncd ~/verificaidade",
+    "text": "Passo 1 — Criar estrutura de diretórios\nmkdir -p ~/verificadocscredito/db-init\ncd ~/verificadocscredito",
     "crumbs": [
       "Infraestrutura",
       "Subindo o INJI Verify Service"
@@ -675,7 +675,7 @@
     "href": "fluxo-verificacao.html",
     "title": "Fluxo de Verificação (Visão Geral)",
     "section": "",
-    "text": "Entender o ciclo completo de uma verificação de idade, do início ao resultado.",
+    "text": "Entender o ciclo completo de uso de uma credencial verificável, do início ao resultado.",
     "crumbs": [
       "Integração",
       "Fluxo de Verificação (Visão Geral)"
@@ -686,7 +686,7 @@
     "href": "fluxo-verificacao.html#objetivo",
     "title": "Fluxo de Verificação (Visão Geral)",
     "section": "",
-    "text": "Entender o ciclo completo de uma verificação de idade, do início ao resultado.",
+    "text": "Entender o ciclo completo de uso de uma credencial verificável, do início ao resultado.",
     "crumbs": [
       "Integração",
       "Fluxo de Verificação (Visão Geral)"
@@ -697,7 +697,7 @@
     "href": "fluxo-verificacao.html#fluxo-ponta-a-ponta-cross-device-qr-code",
     "title": "Fluxo de Verificação (Visão Geral)",
     "section": "Fluxo Ponta a Ponta (Cross-Device — QR Code)",
-    "text": "Fluxo Ponta a Ponta (Cross-Device — QR Code)\n\n\n\n\n\nsequenceDiagram\n    participant U as Usuário (Desktop)\n    participant SDK as App React + SDK\n    participant VS as INJI Verify Service\n    participant W as Carteira Digital (Celular)\n\n    U-&gt;&gt;SDK: Clica \"Verificar Idade\"\n    SDK-&gt;&gt;VS: POST /v1/verify/vp-request\n    VS--&gt;&gt;SDK: requestId + authorizationUrl\n    SDK-&gt;&gt;U: Exibe QR Code (authorizationUrl)\n    U-&gt;&gt;W: Escaneia QR Code com a Carteira\n    W-&gt;&gt;VS: Apresenta credencial (VP submission)\n    VS-&gt;&gt;VS: Valida credencial + policy 18+\n    Note over SDK,VS: SDK faz long-polling em /vp-request/{id}/status\n    VS--&gt;&gt;SDK: Resultado da verificação\n    SDK-&gt;&gt;U: \"Idade verificada!\" (callback)",
+    "text": "Fluxo Ponta a Ponta (Cross-Device — QR Code)\n\n\n\n\n\nsequenceDiagram\n    participant U as Usuário (Desktop)\n    participant SDK as App React + SDK\n    participant VS as INJI Verify Service\n    participant W as Carteira Digital (Celular)\n\n    U-&gt;&gt;SDK: Clica \"Verificar Documentos de Crédito Rural\"\n    SDK-&gt;&gt;VS: POST /v1/verify/vp-request\n    VS--&gt;&gt;SDK: requestId + authorizationUrl\n    SDK-&gt;&gt;U: Exibe QR Code (authorizationUrl)\n    U-&gt;&gt;W: Escaneia QR Code com a Carteira\n    W-&gt;&gt;VS: Apresenta credencial (VP submission)\n    VS-&gt;&gt;VS: Valida credencial + CCIR + CAF + Recibo CAR + Demonstrativo CAR\n    Note over SDK,VS: SDK faz long-polling em /vp-request/{id}/status\n    VS--&gt;&gt;SDK: Resultado da verificação\n    SDK-&gt;&gt;U: \"Documentos verificados!\" (callback)",
     "crumbs": [
       "Integração",
       "Fluxo de Verificação (Visão Geral)"
@@ -708,7 +708,7 @@
     "href": "fluxo-verificacao.html#fluxo-same-device-deep-link-mobile",
     "title": "Fluxo de Verificação (Visão Geral)",
     "section": "Fluxo Same-Device (Deep Link — Mobile)",
-    "text": "Fluxo Same-Device (Deep Link — Mobile)\n\n\n\n\n\nsequenceDiagram\n    participant U as Usuário (Celular)\n    participant SDK as App React + SDK\n    participant VS as INJI Verify Service\n    participant W as Carteira Digital\n\n    U-&gt;&gt;SDK: Toca \"Verificar Idade\"\n    SDK-&gt;&gt;VS: POST /v1/verify/vp-request\n    VS--&gt;&gt;SDK: requestId + authorizationUrl\n    SDK-&gt;&gt;W: Abre Deep Link (openid4vp://...)\n    W-&gt;&gt;VS: Apresenta credencial (VP submission)\n    Note over W: Usuário volta ao app\n    SDK-&gt;&gt;VS: Long-polling /vp-request/{id}/status\n    VS--&gt;&gt;SDK: Resultado da verificação\n    SDK-&gt;&gt;U: \"Idade verificada!\" (callback)",
+    "text": "Fluxo Same-Device (Deep Link — Mobile)\n\n\n\n\n\nsequenceDiagram\n    participant U as Usuário (Celular)\n    participant SDK as App React + SDK\n    participant VS as INJI Verify Service\n    participant W as Carteira Digital\n\n    U-&gt;&gt;SDK: Toca \"Verificar Documentos de Crédito Rural\"\n    SDK-&gt;&gt;VS: POST /v1/verify/vp-request\n    VS--&gt;&gt;SDK: requestId + authorizationUrl\n    SDK-&gt;&gt;W: Abre Deep Link (openid4vp://...)\n    W-&gt;&gt;VS: Apresenta credencial (VP submission)\n    Note over W: Usuário volta ao app\n    SDK-&gt;&gt;VS: Long-polling /vp-request/{id}/status\n    VS--&gt;&gt;SDK: Resultado da verificação\n    SDK-&gt;&gt;U: \"Documentos verificados!\" (callback)",
     "crumbs": [
       "Integração",
       "Fluxo de Verificação (Visão Geral)"
@@ -785,7 +785,7 @@
     "href": "api-reference.html#endpoints-do-inji-verify-service",
     "title": "API Reference",
     "section": "Endpoints do INJI Verify Service",
-    "text": "Endpoints do INJI Verify Service\n\nCriar VP Request\nInicia uma solicitação de verificação OpenID4VP.\nPOST &lt;VERIFY_BASE_URL&gt;/v1/verify/vp-request\nRequest Body:\n{\n  \"presentationDefinition\": {\n    \"id\": \"age-verification-18-plus\",\n    \"input_descriptors\": [\n      {\n        \"id\": \"age_credential\",\n        \"format\": {\n          \"vc+sd-jwt\": {\n            \"sd-jwt_alg_values\": [\"ES256\"]\n          }\n        },\n        \"constraints\": {\n          \"fields\": [\n            {\n              \"path\": [\"$.ageOver18\"],\n              \"filter\": {\n                \"type\": \"boolean\",\n                \"const\": true\n              }\n            }\n          ]\n        }\n      }\n    ]\n  }\n}\nResponse — 200 OK:\n{\n  \"requestId\": \"abc-123-def-456\",\n  \"authorizationUrl\": \"openid4vp://authorize?request_uri=https://...\"\n}\n\n\n\nConsultar Status da VP Request (Long-Polling)\nAguarda até que a Carteira Digital envie a credencial ou o timeout seja atingido.\nGET &lt;VERIFY_BASE_URL&gt;/v1/verify/vp-request/{requestId}/status\nO timeout padrão do long-polling é 55 segundos (configurável via INJI_VP_REQUEST_LONG_POLLING_TIMEOUT).\nResponse — 200 OK (credencial recebida):\n{\n  \"status\": \"COMPLETED\",\n  \"requestId\": \"abc-123-def-456\"\n}\nResponse — 200 OK (aguardando):\n{\n  \"status\": \"PENDING\",\n  \"requestId\": \"abc-123-def-456\"\n}\n\n\n\nObter Resultado da Verificação\nBusca o resultado completo após a Wallet ter submetido a credencial.\nGET &lt;VERIFY_BASE_URL&gt;/v1/verify/vp-result/{requestId}\nResponse — 200 OK:\n[\n  {\n    \"vc\": {\n      \"ageOver18\": true\n    },\n    \"vcStatus\": \"SUCCESS\"\n  }\n]\nValores possíveis de vcStatus:\n\n\n\nValor\nSignificado\n\n\n\n\nSUCCESS\nCredencial válida, policy satisfeita\n\n\nINVALID\nCredencial inválida (assinatura, emissor, formato)\n\n\nEXPIRED\nCredencial expirada\n\n\n\n\n\n\nVP Submission (Wallet → Service)\nEndpoint chamado pela Carteira Digital para enviar a credencial. Você não chama este endpoint diretamente.\nPOST &lt;VERIFY_BASE_URL&gt;/v1/verify/vp-submission\n\n\n\nVC Verification (QR Code Scan/Upload)\nPara o fluxo de QR Code scan/upload (não OpenID4VP), o SDK usa:\nPOST &lt;VERIFY_BASE_URL&gt;/v1/verify/vc-verification\n\n\n\nHealth Check\nGET &lt;VERIFY_BASE_URL&gt;/v1/verify/actuator/health\nResponse — 200 OK:\n{\n  \"status\": \"UP\"\n}",
+    "text": "Endpoints do INJI Verify Service\n\nCriar VP Request\nInicia uma solicitação de verificação OpenID4VP.\nPOST &lt;VERIFY_BASE_URL&gt;/v1/verify/vp-request\nRequest Body:\n{\n  \"presentationDefinition\": {\n    \"id\": \"CCIR\",\n    \"input_descriptors\": [\n      {\n        \"id\": \"ccir\",\n        \"format\": {\n          \"vc+sd-jwt\": {\n            \"sd-jwt_alg_values\": [\"ES256\"]\n          }\n        },\n        \"constraints\": {\n          \"fields\": [\n            {\n              \"path\": [\"$.id\"],\n              \"filter\": {\n                \"type\": \"string\",\n                \"const\": \"&lt;id&gt;\"\n              }\n            }\n          ]\n        }\n      }\n    ]\n  }\n}\nResponse — 200 OK:\n{\n  \"requestId\": \"abc-123-def-456\",\n  \"authorizationUrl\": \"openid4vp://authorize?request_uri=https://...\"\n}\n\n\n\nConsultar Status da VP Request (Long-Polling)\nAguarda até que a Carteira Digital envie a credencial ou o timeout seja atingido.\nGET &lt;VERIFY_BASE_URL&gt;/v1/verify/vp-request/{requestId}/status\nO timeout padrão do long-polling é 55 segundos (configurável via INJI_VP_REQUEST_LONG_POLLING_TIMEOUT).\nResponse — 200 OK (credencial recebida):\n{\n  \"status\": \"COMPLETED\",\n  \"requestId\": \"abc-123-def-456\"\n}\nResponse — 200 OK (aguardando):\n{\n  \"status\": \"PENDING\",\n  \"requestId\": \"abc-123-def-456\"\n}\n\n\n\nObter Resultado da Verificação\nBusca o resultado completo após a Wallet ter submetido a credencial.\nGET &lt;VERIFY_BASE_URL&gt;/v1/verify/vp-result/{requestId}\nResponse — 200 OK:\n[\n  {\n    \"vc\": {\n      \"ageOver18\": true\n    },\n    \"vcStatus\": \"SUCCESS\"\n  }\n]\nValores possíveis de vcStatus:\n\n\n\nValor\nSignificado\n\n\n\n\nSUCCESS\nCredencial válida, policy satisfeita\n\n\nINVALID\nCredencial inválida (assinatura, emissor, formato)\n\n\nEXPIRED\nCredencial expirada\n\n\n\n\n\n\nVP Submission (Wallet → Service)\nEndpoint chamado pela Carteira Digital para enviar a credencial. Você não chama este endpoint diretamente.\nPOST &lt;VERIFY_BASE_URL&gt;/v1/verify/vp-submission\n\n\n\nVC Verification (QR Code Scan/Upload)\nPara o fluxo de QR Code scan/upload (não OpenID4VP), o SDK usa:\nPOST &lt;VERIFY_BASE_URL&gt;/v1/verify/vc-verification\n\n\n\nHealth Check\nGET &lt;VERIFY_BASE_URL&gt;/v1/verify/actuator/health\nResponse — 200 OK:\n{\n  \"status\": \"UP\"\n}",
     "crumbs": [
       "Referência",
       "API Reference"
@@ -944,7 +944,7 @@
     "href": "integra-mobile.html",
     "title": "Integração Mobile (Deep Link)",
     "section": "",
-    "text": "Implementar verificação de idade em um app web mobile usando Deep Link (fluxo same-device).",
+    "text": "Implementar uso de credenciais verificáveis em um app web mobile usando Deep Link (fluxo same-device).",
     "crumbs": [
       "Integração",
       "Integração Mobile (Deep Link)"
@@ -955,7 +955,7 @@
     "href": "integra-mobile.html#objetivo",
     "title": "Integração Mobile (Deep Link)",
     "section": "",
-    "text": "Implementar verificação de idade em um app web mobile usando Deep Link (fluxo same-device).",
+    "text": "Implementar uso de credenciais verificáveis em um app web mobile usando Deep Link (fluxo same-device).",
     "crumbs": [
       "Integração",
       "Integração Mobile (Deep Link)"
@@ -966,7 +966,7 @@
     "href": "integra-mobile.html#fluxo-mobile",
     "title": "Integração Mobile (Deep Link)",
     "section": "Fluxo Mobile",
-    "text": "Fluxo Mobile\n\n\n\n\n\nsequenceDiagram\n    participant U as Usuário (Celular)\n    participant SDK as App React + SDK\n    participant VS as INJI Verify Service\n    participant W as Carteira Digital\n\n    U-&gt;&gt;SDK: Toca \"Verificar Idade\"\n    SDK-&gt;&gt;VS: POST /v1/verify/vp-request\n    VS--&gt;&gt;SDK: requestId + authorizationUrl\n    SDK-&gt;&gt;W: Redireciona via Deep Link (openid4vp://...)\n    W-&gt;&gt;VS: POST /v1/verify/vp-submission\n    Note over W: Usuário volta ao app\n    SDK-&gt;&gt;VS: Long-polling /vp-request/{id}/status\n    VS--&gt;&gt;SDK: Resultado\n    SDK-&gt;&gt;U: Callback executado",
+    "text": "Fluxo Mobile\n\n\n\n\n\nsequenceDiagram\n    participant U as Usuário (Celular)\n    participant SDK as App React + SDK\n    participant VS as INJI Verify Service\n    participant W as Carteira Digital\n\n    U-&gt;&gt;SDK: Toca \"Verificar Documentos de Crédito Rural\"\n    SDK-&gt;&gt;VS: POST /v1/verify/vp-request\n    VS--&gt;&gt;SDK: requestId + authorizationUrl\n    SDK-&gt;&gt;W: Redireciona via Deep Link (openid4vp://...)\n    W-&gt;&gt;VS: POST /v1/verify/vp-submission\n    Note over W: Usuário volta ao app\n    SDK-&gt;&gt;VS: Long-polling /vp-request/{id}/status\n    VS--&gt;&gt;SDK: Resultado\n    SDK-&gt;&gt;U: Callback executado",
     "crumbs": [
       "Integração",
       "Integração Mobile (Deep Link)"
@@ -999,7 +999,7 @@
     "href": "integra-mobile.html#passo-1-o-mesmo-componente-funciona",
     "title": "Integração Mobile (Deep Link)",
     "section": "Passo 1 — O mesmo componente funciona",
-    "text": "Passo 1 — O mesmo componente funciona\n// src/components/VerificaIdade.tsx\n// O MESMO código da integração Web funciona no mobile!\nimport { OpenID4VPVerification } from '@mosip/react-inji-verify-sdk';\n\nexport function VerificaIdade() {\n  return (\n    &lt;OpenID4VPVerification\n      verifyServiceUrl=\"&lt;VERIFY_BASE_URL&gt;/v1/verify\"\n      clientId=\"did:web:&lt;SEU_DOMINIO&gt;:v1:verify\"\n      protocol=\"openid4vp://\"\n      presentationDefinition={presentationDefinition}\n      isSameDeviceFlowEnabled={true}  // padrão — Deep Link no mobile\n      onVpProcessed={(results) =&gt; {\n        const ok = results.some(r =&gt; r.vcStatus === 'SUCCESS');\n        console.log('Verificado:', ok);\n      }}\n      onError={(error) =&gt; console.error(error)}\n      onQrCodeExpired={() =&gt; console.log('Expirou')}\n    /&gt;\n  );\n}\n\n\n\n\n\n\nNota\n\n\n\nNão é necessário código diferente para mobile. O SDK detecta o dispositivo automaticamente e escolhe entre QR Code e Deep Link.",
+    "text": "Passo 1 — O mesmo componente funciona\n// src/components/VerificaDocsCredito.tsx\n// O MESMO código da integração Web funciona no mobile!\nimport { OpenID4VPVerification } from '@mosip/react-inji-verify-sdk';\n\nexport function VerificaDocsCredito() {\n  return (\n    &lt;OpenID4VPVerification\n      verifyServiceUrl=\"&lt;VERIFY_BASE_URL&gt;/v1/verify\"\n      clientId=\"did:web:&lt;SEU_DOMINIO&gt;:v1:verify\"\n      protocol=\"openid4vp://\"\n      presentationDefinition={presentationDefinition}\n      isSameDeviceFlowEnabled={true}  // padrão — Deep Link no mobile\n      onVpProcessed={(results) =&gt; {\n        const ok = results.some(r =&gt; r.vcStatus === 'SUCCESS');\n        console.log('Verificado:', ok);\n      }}\n      onError={(error) =&gt; console.error(error)}\n      onQrCodeExpired={() =&gt; console.log('Expirou')}\n    /&gt;\n  );\n}\n\n\n\n\n\n\nNota\n\n\n\nNão é necessário código diferente para mobile. O SDK detecta o dispositivo automaticamente e escolhe entre QR Code e Deep Link.",
     "crumbs": [
       "Integração",
       "Integração Mobile (Deep Link)"
@@ -1043,7 +1043,7 @@
     "href": "integra-mobile.html#considerações-mobile",
     "title": "Integração Mobile (Deep Link)",
     "section": "Considerações Mobile",
-    "text": "Considerações Mobile\n\nRetorno ao app\nQuando o usuário volta da Carteira Digital ao navegador, o SDK restaura a sessão a partir do sessionStorage. O resultado é obtido automaticamente.\n\n\nCarteira não instalada\nSe a Carteira Digital não estiver instalada, o Deep Link não abrirá nada. Trate isso com uma mensagem orientando o usuário:\n&lt;OpenID4VPVerification\n  // ...\n  onError={(error) =&gt; {\n    // Informar o usuário para instalar a Carteira Digital\n    alert('Instale a Carteira Digital para verificar sua idade.');\n  }}\n/&gt;\n\n\nApps nativos (Flutter, React Native)\nO INJI Verify SDK é exclusivo para React Web. Para apps nativos, você tem duas opções:\n\nWebView — Abrir uma tela React com o SDK dentro de uma WebView\nAPI direta — Chamar os endpoints do INJI Verify Service diretamente e implementar a lógica de Deep Link no app nativo\n\n\n\n\n\n\n\nAviso\n\n\n\nO SDK não suporta React Native, Angular, Vue ou SSR (Next.js). Para apps nativos, use a opção de WebView ou API direta.",
+    "text": "Considerações Mobile\n\nRetorno ao app\nQuando o usuário volta da Carteira Digital ao navegador, o SDK restaura a sessão a partir do sessionStorage. O resultado é obtido automaticamente.\n\n\nCarteira não instalada\nSe a Carteira Digital não estiver instalada, o Deep Link não abrirá nada. Trate isso com uma mensagem orientando o usuário:\n&lt;OpenID4VPVerification\n  // ...\n  onError={(error) =&gt; {\n    // Informar o usuário para instalar a Carteira Digital\n    alert('Instale a Carteira Digital para verificar seus documentos de Crédito Rural.');\n  }}\n/&gt;\n\n\nApps nativos (Flutter, React Native)\nO INJI Verify SDK é exclusivo para React Web. Para apps nativos, você tem duas opções:\n\nWebView — Abrir uma tela React com o SDK dentro de uma WebView\nAPI direta — Chamar os endpoints do INJI Verify Service diretamente e implementar a lógica de Deep Link no app nativo\n\n\n\n\n\n\n\nAviso\n\n\n\nO SDK não suporta React Native, Angular, Vue ou SSR (Next.js). Para apps nativos, use a opção de WebView ou API direta.",
     "crumbs": [
       "Integração",
       "Integração Mobile (Deep Link)"
@@ -1142,7 +1142,7 @@
     "href": "onboarding.html#passos-do-credenciamento",
     "title": "Onboarding (Conceito e Uso com WSO2)",
     "section": "Passos do credenciamento",
-    "text": "Passos do credenciamento\n\nPasso 1 — Solicitar acesso\nEntre em contato com o órgão responsável pelo VerificaIdade.\n\n\nPasso 2 — Receber acesso ao portal\nApós aprovação, você receberá acesso ao portal do gateway WSO2.\n\n\nPasso 3 — Configurar identidade\n\nGere ou receba o DID Web do seu verificador\nGere ou receba o keystore PKCS12\n\n\n\nPasso 4 — Configurar INJI Verify Service\nUse os valores recebidos nas variáveis de ambiente do INJI Verify Service:\nINJI_DID_VERIFY_URI=did:web:verify.seu-dominio.com.br:v1:verify\nINJI_DID_VERIFY_PUBLIC_KEY_URI=did:web:verify.seu-dominio.com.br:v1:verify#key-0\nINJI_KEYSTORE_FILE_PASS=sua-senha-do-keystore\nINJI_VP_SUBMISSION_BASE_URL=https://verify.seu-dominio.com.br/v1/verify\n\n\nPasso 5 — Testar em homologação\nUse credenciais de teste para validar o fluxo completo antes de ir para produção.",
+    "text": "Passos do credenciamento\n\nPasso 1 — Solicitar acesso\nEntre em contato com o órgão responsável pelas Credenciais Verificáveis.\n\n\nPasso 2 — Receber acesso ao portal\nApós aprovação, você receberá acesso ao portal do gateway WSO2.\n\n\nPasso 3 — Configurar identidade\n\nGere ou receba o DID Web do seu verificador\nGere ou receba o keystore PKCS12\n\n\n\nPasso 4 — Configurar INJI Verify Service\nUse os valores recebidos nas variáveis de ambiente do INJI Verify Service:\nINJI_DID_VERIFY_URI=did:web:verify.seu-dominio.com.br:v1:verify\nINJI_DID_VERIFY_PUBLIC_KEY_URI=did:web:verify.seu-dominio.com.br:v1:verify#key-0\nINJI_KEYSTORE_FILE_PASS=sua-senha-do-keystore\nINJI_VP_SUBMISSION_BASE_URL=https://verify.seu-dominio.com.br/v1/verify\n\n\nPasso 5 — Testar em homologação\nUse credenciais de teste para validar o fluxo completo antes de ir para produção.",
     "crumbs": [
       "Referência",
       "Onboarding (Conceito e Uso com WSO2)"
@@ -1153,7 +1153,7 @@
     "href": "onboarding.html#dúvidas-sobre-onboarding",
     "title": "Onboarding (Conceito e Uso com WSO2)",
     "section": "Dúvidas sobre Onboarding",
-    "text": "Dúvidas sobre Onboarding\nO processo de onboarding é gerenciado pelo órgão responsável pelo VerificaIdade. Consulte a documentação fornecida no credenciamento.",
+    "text": "Dúvidas sobre Onboarding\nO processo de onboarding é gerenciado pelo órgão responsável pelas Credenciais Verificáveis. Consulte a documentação fornecida no credenciamento.",
     "crumbs": [
       "Referência",
       "Onboarding (Conceito e Uso com WSO2)"
@@ -1175,7 +1175,7 @@
     "href": "politica-privacidade.html#dados-que-coletamos",
     "title": "Política de Privacidade",
     "section": "1. Dados que coletamos",
-    "text": "1. Dados que coletamos\n\n1.1 Dados de autenticação\nO Aplicativo utiliza o login Gov.br (via protocolo OAuth 2.0 com PKCE) para autenticar sua identidade. Durante esse processo, recebemos do Gov.br:\n\nNome\nCPF\nE-mail\nNível de confiabilidade da conta\n\nEsses dados são usados exclusivamente para vincular sua identidade às credenciais verificáveis emitidas.\n\n\n1.2 Credenciais verificáveis\nO Aplicativo armazena localmente no seu dispositivo credenciais verificáveis (ex: comprovante de maioridade). Essas credenciais são baixadas de emissores autorizados e ficam sob seu controle.\n\n\n1.3 Dados biométricos\nO Aplicativo pode solicitar autenticação biométrica (impressão digital ou reconhecimento facial) para autorizar o compartilhamento de credenciais. Nenhum dado biométrico é coletado, transmitido ou armazenado pelo Aplicativo — a autenticação é processada inteiramente pelo sistema operacional do dispositivo.\n\n\n1.4 Câmera\nO Aplicativo acessa a câmera exclusivamente para leitura de QR Codes durante o fluxo de verificação de idade. Nenhuma imagem ou vídeo é capturado ou armazenado.",
+    "text": "1. Dados que coletamos\n\n1.1 Dados de autenticação\nO Aplicativo utiliza o login Gov.br (via protocolo OAuth 2.0 com PKCE) para autenticar sua identidade. Durante esse processo, recebemos do Gov.br:\n\nNome\nCPF\nE-mail\nNível de confiabilidade da conta\n\nEsses dados são usados exclusivamente para vincular sua identidade às credenciais verificáveis emitidas.\n\n\n1.2 Credenciais verificáveis\nO Aplicativo armazena localmente no seu dispositivo credenciais verificáveis (ex: comprovante de maioridade). Essas credenciais são baixadas de emissores autorizados e ficam sob seu controle.\n\n\n1.3 Dados biométricos\nO Aplicativo pode solicitar autenticação biométrica (impressão digital ou reconhecimento facial) para autorizar o compartilhamento de credenciais. Nenhum dado biométrico é coletado, transmitido ou armazenado pelo Aplicativo — a autenticação é processada inteiramente pelo sistema operacional do dispositivo.\n\n\n1.4 Câmera\nO Aplicativo acessa a câmera exclusivamente para leitura de QR Codes durante o fluxo de validação da credencial verificável. Nenhuma imagem ou vídeo é capturado ou armazenado.",
     "crumbs": [
       "Referência",
       "Política de Privacidade"
@@ -1186,7 +1186,7 @@
     "href": "politica-privacidade.html#como-usamos-seus-dados",
     "title": "Política de Privacidade",
     "section": "2. Como usamos seus dados",
-    "text": "2. Como usamos seus dados\n\n\n\n\n\n\n\n\nDado\nFinalidade\nArmazenamento\n\n\n\n\nDados Gov.br (nome, CPF, e-mail)\nAutenticação e emissão de credenciais\nLocal no dispositivo (criptografado)\n\n\nCredenciais verificáveis\nComprovação de maioridade quando solicitado\nLocal no dispositivo (criptografado)\n\n\nBiometria\nAutorização de compartilhamento\nApenas no sistema operacional\n\n\nCâmera\nLeitura de QR Code\nSem armazenamento",
+    "text": "2. Como usamos seus dados\n\n\n\n\n\n\n\n\nDado\nFinalidade\nArmazenamento\n\n\n\n\nDados Gov.br (nome, CPF, e-mail)\nAutenticação e emissão de credenciais\nLocal no dispositivo (criptografado)\n\n\nCredenciais verificáveis\nDocumentos para Crédito Rural quando solicitado\nLocal no dispositivo (criptografado)\n\n\nCâmera\nLeitura de QR Code\nSem armazenamento",
     "crumbs": [
       "Referência",
       "Política de Privacidade"
@@ -1197,7 +1197,7 @@
     "href": "politica-privacidade.html#compartilhamento-de-dados",
     "title": "Política de Privacidade",
     "section": "3. Compartilhamento de dados",
-    "text": "3. Compartilhamento de dados\n\n3.1 Princípio de minimização\nQuando você autoriza uma verificação de idade, o Aplicativo compartilha apenas a informação de que você é maior de 18 anos (ageOver18: true). Sua data de nascimento, CPF, nome e demais dados pessoais não são compartilhados com o solicitante.\n\n\n3.2 Consentimento explícito\nTodo compartilhamento de dados requer sua autorização explícita. Antes de compartilhar, o Aplicativo exibe:\n\nQuem está solicitando a verificação\nQuais dados serão compartilhados\nA política de retenção do solicitante\n\nVocê pode recusar o compartilhamento a qualquer momento.\n\n\n3.3 Uso único\nAs verificações são de uso único — o solicitante recebe o resultado da verificação sem armazenar sua credencial.",
+    "text": "3. Compartilhamento de dados\n\n3.1 Princípio de minimização\nQuando você autoriza uso de uma credencial verificável, o Aplicativo compartilha apenas a informação contida nela. Sua data de nascimento, CPF, nome e demais dados pessoais não são compartilhados com o solicitante.\n\n\n3.2 Consentimento explícito\nTodo compartilhamento de dados requer sua autorização explícita. Antes de compartilhar, o Aplicativo exibe:\n\nQuem está solicitando a verificação\nQuais dados serão compartilhados\nA política de retenção do solicitante\n\nVocê pode recusar o compartilhamento a qualquer momento.\n\n\n3.3 Uso único\nAs verificações são de uso único — o solicitante recebe o resultado da verificação sem armazenar sua credencial.",
     "crumbs": [
       "Referência",
       "Política de Privacidade"
@@ -1241,7 +1241,7 @@
     "href": "politica-privacidade.html#permissões-do-aplicativo",
     "title": "Política de Privacidade",
     "section": "7. Permissões do aplicativo",
-    "text": "7. Permissões do aplicativo\n\n\n\n\n\n\n\nPermissão\nMotivo\n\n\n\n\nCAMERA\nLeitura de QR Codes para verificação\n\n\nUSE_BIOMETRIC / USE_FINGERPRINT\nAutenticação biométrica para autorizar compartilhamento\n\n\nINTERNET\nComunicação com serviços de autenticação e verificação",
+    "text": "7. Permissões do aplicativo\n\n\n\nPermissão\nMotivo\n\n\n\n\nCAMERA\nLeitura de QR Codes para verificação\n\n\nINTERNET\nComunicação com serviços de autenticação e verificação",
     "crumbs": [
       "Referência",
       "Política de Privacidade"
@@ -1274,7 +1274,7 @@
     "href": "quickstart.html",
     "title": "Integre rapidamente",
     "section": "",
-    "text": "Sair do zero até uma verificação de idade funcionando em ambiente de desenvolvimento.",
+    "text": "Sair do zero até uma credencial verificável funcionando em ambiente de desenvolvimento.",
     "crumbs": [
       "Início Rápido",
       "Integre rapidamente"
@@ -1285,7 +1285,7 @@
     "href": "quickstart.html#objetivo",
     "title": "Integre rapidamente",
     "section": "",
-    "text": "Sair do zero até uma verificação de idade funcionando em ambiente de desenvolvimento.",
+    "text": "Sair do zero até uma credencial verificável funcionando em ambiente de desenvolvimento.",
     "crumbs": [
       "Início Rápido",
       "Integre rapidamente"
@@ -1351,7 +1351,7 @@
     "href": "quickstart.html#etapa-5-adicionar-componente-de-verificação",
     "title": "Integre rapidamente",
     "section": "Etapa 5 — Adicionar componente de verificação",
-    "text": "Etapa 5 — Adicionar componente de verificação\n// src/components/VerificaIdade.tsx\nimport { OpenID4VPVerification } from '@mosip/react-inji-verify-sdk';\n\n// Substitua pela URL do seu INJI Verify Service\nconst VERIFY_SERVICE_URL = 'https://abc123.ngrok-free.app/v1/verify';\n\n// Substitua pelo DID do seu verificador\nconst CLIENT_ID_DID = 'did:web:abc123.ngrok-free.app:v1:verify';\n\n// Presentation Definition para verificação de idade 18+\n// Substitua pela definição fornecida no seu credenciamento\nconst presentationDefinition = {\n  id: 'age-verification-18-plus',\n  input_descriptors: [\n    {\n      id: 'age_credential',\n      format: {\n        'vc+sd-jwt': {\n          'sd-jwt_alg_values': ['ES256']\n        }\n      },\n      constraints: {\n        fields: [\n          {\n            path: ['$.ageOver18'],\n            filter: {\n              type: 'boolean',\n              const: true\n            }\n          }\n        ]\n      }\n    }\n  ]\n};\n\nexport function VerificaIdade() {\n  const handleVerificado = (txnId: string) =&gt; {\n    console.log('Verificação concluída. Transaction ID:', txnId);\n    // Busque o resultado no seu backend se necessário\n    // ou use onVpProcessed para receber o resultado direto\n  };\n\n  const handleErro = (error: unknown) =&gt; {\n    console.error('Erro na verificação:', error);\n  };\n\n  const handleQrExpirado = () =&gt; {\n    console.log('QR Code expirou');\n  };\n\n  return (\n    &lt;div&gt;\n      &lt;h2&gt;Verificação de Idade&lt;/h2&gt;\n      &lt;OpenID4VPVerification\n        verifyServiceUrl={VERIFY_SERVICE_URL}\n        clientId={CLIENT_ID_DID}\n        protocol=\"openid4vp://\"\n        presentationDefinition={presentationDefinition}\n        onVpReceived={handleVerificado}\n        onError={handleErro}\n        onQrCodeExpired={handleQrExpirado}\n      /&gt;\n    &lt;/div&gt;\n  );\n}\nResultado: Componente renderiza QR Code na tela.",
+    "text": "Etapa 5 — Adicionar componente de verificação\n// src/components/VerificaDocsCredito.tsx\nimport { OpenID4VPVerification } from '@mosip/react-inji-verify-sdk';\n\n// Substitua pela URL do seu INJI Verify Service\nconst VERIFY_SERVICE_URL = 'https://abc123.ngrok-free.app/v1/verify';\n\n// Substitua pelo DID do seu verificador\nconst CLIENT_ID_DID = 'did:web:abc123.ngrok-free.app:v1:verify';\n\n// Presentation Definition para credencial verificável\n// Substitua pela definição fornecida no seu credenciamento\nconst presentationDefinition = {\n  id: 'CCIR',\n  input_descriptors: [\n    {\n      id: 'ccir',\n      format: {\n        'vc+sd-jwt': {\n          'sd-jwt_alg_values': ['ES256']\n        }\n      },\n      constraints: {\n        fields: [\n          {\n            path: ['$.id'],\n            filter: {\n              type: 'string',\n              const: \"&lt;id&gt;\"\n            }\n          }\n        ]\n      }\n    }\n  ]\n};\n\nexport function VerificaDocsCredito() {\n  const handleVerificado = (txnId: string) =&gt; {\n    console.log('Verificação concluída. Transaction ID:', txnId);\n    // Busque o resultado no seu backend se necessário\n    // ou use onVpProcessed para receber o resultado direto\n  };\n\n  const handleErro = (error: unknown) =&gt; {\n    console.error('Erro na verificação:', error);\n  };\n\n  const handleQrExpirado = () =&gt; {\n    console.log('QR Code expirou');\n  };\n\n  return (\n    &lt;div&gt;\n      &lt;h2&gt;Credencial Verificável&lt;/h2&gt;\n      &lt;OpenID4VPVerification\n        verifyServiceUrl={VERIFY_SERVICE_URL}\n        clientId={CLIENT_ID_DID}\n        protocol=\"openid4vp://\"\n        presentationDefinition={presentationDefinition}\n        onVpReceived={handleVerificado}\n        onError={handleErro}\n        onQrCodeExpired={handleQrExpirado}\n      /&gt;\n    &lt;/div&gt;\n  );\n}\nResultado: Componente renderiza QR Code na tela.",
     "crumbs": [
       "Início Rápido",
       "Integre rapidamente"
@@ -1373,7 +1373,7 @@
     "href": "quickstart.html#alternativa-receber-resultado-completo-no-frontend",
     "title": "Integre rapidamente",
     "section": "Alternativa: Receber resultado completo no frontend",
-    "text": "Alternativa: Receber resultado completo no frontend\nSe preferir receber o resultado diretamente (sem buscar no backend), use onVpProcessed em vez de onVpReceived:\n&lt;OpenID4VPVerification\n  verifyServiceUrl={VERIFY_SERVICE_URL}\n  clientId={CLIENT_ID_DID}\n  protocol=\"openid4vp://\"\n  presentationDefinition={presentationDefinition}\n  onVpProcessed={(results) =&gt; {\n    // results: Array&lt;{ vc: unknown, vcStatus: \"SUCCESS\" | \"INVALID\" | \"EXPIRED\" }&gt;\n    const verificado = results.some(r =&gt; r.vcStatus === 'SUCCESS');\n    console.log('Idade verificada:', verificado);\n  }}\n  onError={(error) =&gt; console.error(error)}\n  onQrCodeExpired={() =&gt; console.log('QR expirou')}\n/&gt;\n\n\n\n\n\n\nAviso\n\n\n\nA documentação do INJI recomenda usar onVpReceived em produção e buscar o resultado pelo txnId no backend para maior segurança. O onVpProcessed é adequado para desenvolvimento e testes.",
+    "text": "Alternativa: Receber resultado completo no frontend\nSe preferir receber o resultado diretamente (sem buscar no backend), use onVpProcessed em vez de onVpReceived:\n&lt;OpenID4VPVerification\n  verifyServiceUrl={VERIFY_SERVICE_URL}\n  clientId={CLIENT_ID_DID}\n  protocol=\"openid4vp://\"\n  presentationDefinition={presentationDefinition}\n  onVpProcessed={(results) =&gt; {\n    // results: Array&lt;{ vc: unknown, vcStatus: \"SUCCESS\" | \"INVALID\" | \"EXPIRED\" }&gt;\n    const verificado = results.some(r =&gt; r.vcStatus === 'SUCCESS');\n    console.log('CCIR verificado:', verificado);\n  }}\n  onError={(error) =&gt; console.error(error)}\n  onQrCodeExpired={() =&gt; console.log('QR expirou')}\n/&gt;\n\n\n\n\n\n\nAviso\n\n\n\nA documentação do INJI recomenda usar onVpReceived em produção e buscar o resultado pelo txnId no backend para maior segurança. O onVpProcessed é adequado para desenvolvimento e testes.",
     "crumbs": [
       "Início Rápido",
       "Integre rapidamente"

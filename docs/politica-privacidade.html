@@ -324,7 +324,7 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="câmera" class="level3">
 <h3 class="anchored" data-anchor-id="câmera">1.4 Câmera</h3>
-<p>O Aplicativo acessa a câmera exclusivamente para leitura de QR Codes durante o fluxo de verificação de idade. Nenhuma imagem ou vídeo é capturado ou armazenado.</p>
+<p>O Aplicativo acessa a câmera exclusivamente para leitura de QR Codes durante o fluxo de validação da credencial verificável. Nenhuma imagem ou vídeo é capturado ou armazenado.</p>
 </section>
 </section>
 <section id="como-usamos-seus-dados" class="level2">
@@ -350,15 +350,10 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 <tr class="even">
 <td>Credenciais verificáveis</td>
-<td>Comprovação de maioridade quando solicitado</td>
+<td>Documentos para Crédito Rural quando solicitado</td>
 <td>Local no dispositivo (criptografado)</td>
 </tr>
 <tr class="odd">
-<td>Biometria</td>
-<td>Autorização de compartilhamento</td>
-<td>Apenas no sistema operacional</td>
-</tr>
-<tr class="even">
 <td>Câmera</td>
 <td>Leitura de QR Code</td>
 <td>Sem armazenamento</td>
@@ -370,7 +365,7 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="compartilhamento-de-dados">3. Compartilhamento de dados</h2>
 <section id="princípio-de-minimização" class="level3">
 <h3 class="anchored" data-anchor-id="princípio-de-minimização">3.1 Princípio de minimização</h3>
-<p>Quando você autoriza uma verificação de idade, o Aplicativo compartilha <strong>apenas</strong> a informação de que você é maior de 18 anos (<code>ageOver18: true</code>). Sua data de nascimento, CPF, nome e demais dados pessoais <strong>não são compartilhados</strong> com o solicitante.</p>
+<p>Quando você autoriza uso de uma credencial verificável, o Aplicativo compartilha <strong>apenas</strong> a informação contida nela. Sua data de nascimento, CPF, nome e demais dados pessoais <strong>não são compartilhados</strong> com o solicitante.</p>
 </section>
 <section id="consentimento-explícito" class="level3">
 <h3 class="anchored" data-anchor-id="consentimento-explícito">3.2 Consentimento explícito</h3>
@@ -433,10 +428,6 @@ ul.task-list li input[type="checkbox"] {
 <section id="permissões-do-aplicativo" class="level2">
 <h2 class="anchored" data-anchor-id="permissões-do-aplicativo">7. Permissões do aplicativo</h2>
 <table class="caption-top table">
-<colgroup>
-<col style="width: 57%">
-<col style="width: 42%">
-</colgroup>
 <thead>
 <tr class="header">
 <th>Permissão</th>
@@ -449,10 +440,6 @@ ul.task-list li input[type="checkbox"] {
 <td>Leitura de QR Codes para verificação</td>
 </tr>
 <tr class="even">
-<td><code>USE_BIOMETRIC</code> / <code>USE_FINGERPRINT</code></td>
-<td>Autenticação biométrica para autorizar compartilhamento</td>
-</tr>
-<tr class="odd">
 <td><code>INTERNET</code></td>
 <td>Comunicação com serviços de autenticação e verificação</td>
 </tr>

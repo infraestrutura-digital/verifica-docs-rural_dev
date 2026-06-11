@@ -329,7 +329,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="objetivo" class="level2">
 <h2 class="anchored" data-anchor-id="objetivo">Objetivo</h2>
-<p>Implementar credencial verificável em uma aplicação Web React usando QR Code (fluxo cross-device).</p>
+<p>Implementar uso de credenciais verificáveis em uma aplicação Web React usando QR Code (fluxo cross-device).</p>
 </section>
 <section id="fluxo-web" class="level2">
 <h2 class="anchored" data-anchor-id="fluxo-web">Fluxo Web</h2>
@@ -344,7 +344,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     participant VS as INJI Verify Service
     participant W as Carteira Digital (Celular)
 
-    U-&gt;&gt;SDK: Clica "Verificar Idade"
+    U-&gt;&gt;SDK: Clica "Verificar Documentos de Crédito Rural"
     SDK-&gt;&gt;VS: POST /v1/verify/vp-request
     VS--&gt;&gt;SDK: requestId + authorizationUrl
     SDK-&gt;&gt;U: Renderiza QR Code
@@ -371,7 +371,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="passo-2-componente-de-verificação" class="level2">
 <h2 class="anchored" data-anchor-id="passo-2-componente-de-verificação">Passo 2 — Componente de verificação</h2>
-<pre class="tsx"><code>// src/components/VerificaIdade.tsx
+<pre class="tsx"><code>// src/components/VerificaDocsCredito.tsx
 import { useState } from 'react';
 import { OpenID4VPVerification } from '@mosip/react-inji-verify-sdk';
 
@@ -381,10 +381,10 @@ const CLIENT_ID_DID = 'did:web:&lt;SEU_DOMINIO&gt;:v1:verify';
 
 // Substitua pela Presentation Definition do seu credenciamento
 const presentationDefinition = {
-  id: 'age-verification-18-plus',
+  id: 'CCIR',
   input_descriptors: [
     {
-      id: 'age_credential',
+      id: 'ccir',
       format: {
         'vc+sd-jwt': {
           'sd-jwt_alg_values': ['ES256']
@@ -393,10 +393,10 @@ const presentationDefinition = {
       constraints: {
         fields: [
           {
-            path: ['$.ageOver18'],
+            path: ['$.id'],
             filter: {
-              type: 'boolean',
-              const: true
+              type: 'string',
+              const: "&lt;id&gt;"
             }
           }
         ]
@@ -405,12 +405,12 @@ const presentationDefinition = {
   ]
 };
 
-type VerificaIdadeProps = {
+type VerificaDocsCreditoProps = {
   onVerificado: () =&gt; void;
   onFalhou: () =&gt; void;
 };
 
-export function VerificaIdade({ onVerificado, onFalhou }: VerificaIdadeProps) {
+export function VerificaDocsCredito({ onVerificado, onFalhou }: VerificaDocsCreditoProps) {
   const [estado, setEstado] = useState&lt;'idle' | 'verificado' | 'falhou'&gt;('idle');
 
   return (
@@ -443,7 +443,7 @@ export function VerificaIdade({ onVerificado, onFalhou }: VerificaIdadeProps) {
       )}
 
       {estado === 'verificado' &amp;&amp; (
-        &lt;p&gt;Idade verificada com sucesso.&lt;/p&gt;
+        &lt;p&gt;Documentos verificados com sucesso.&lt;/p&gt;
       )}
 
       {estado === 'falhou' &amp;&amp; (
@@ -459,12 +459,12 @@ export function VerificaIdade({ onVerificado, onFalhou }: VerificaIdadeProps) {
 <section id="passo-3-usar-o-componente" class="level2">
 <h2 class="anchored" data-anchor-id="passo-3-usar-o-componente">Passo 3 — Usar o componente</h2>
 <pre class="tsx"><code>// src/pages/Checkout.tsx
-import { VerificaIdade } from '../components/VerificaIdade';
+import { VerificaDocsCredito } from '../components/VerificaDocsCredito';
 
 export function Checkout() {
   return (
     &lt;div&gt;
-      &lt;h1&gt;Verificação de Idade&lt;/h1&gt;
+      &lt;h1&gt;Verificação de Documentos de Crédito Rural&lt;/h1&gt;
       &lt;VerificaIdade
         onVerificado={() =&gt; console.log('Acesso liberado')}
         onFalhou={() =&gt; console.log('Acesso negado')}
@@ -476,10 +476,10 @@ export function Checkout() {
 <section id="versão-para-produção-com-onvpreceived" class="level2">
 <h2 class="anchored" data-anchor-id="versão-para-produção-com-onvpreceived">Versão para produção (com <code>onVpReceived</code>)</h2>
 <p>Em produção, use <code>onVpReceived</code> para buscar o resultado no backend:</p>
-<pre class="tsx"><code>// src/components/VerificaIdadeProd.tsx
+<pre class="tsx"><code>// src/components/VerificaDocsCreditoProd.tsx
 import { OpenID4VPVerification } from '@mosip/react-inji-verify-sdk';
 
-export function VerificaIdadeProd() {
+export function VerificaDocsCreditoProd() {
   const handleVpReceived = async (txnId: string) =&gt; {
     // Buscar resultado no seu backend
     const res = await fetch(`/api/verificacao/resultado/${txnId}`);
@@ -527,7 +527,7 @@ Importante
     bgColor: '#ffffff',
     fgColor: '#000000',
   }}
-  triggerElement={&lt;button className="btn-verificar"&gt;Verificar Idade&lt;/button&gt;}
+  triggerElement={&lt;button className="btn-verificar"&gt;Verificar Documentos de Crédito Rural&lt;/button&gt;}
 /&gt;</code></pre>
 </section>
 <section id="props-do-openid4vpverification" class="level2">
