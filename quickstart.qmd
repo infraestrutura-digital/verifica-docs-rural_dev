@@ -86,7 +86,7 @@ O SDK requer **React 18.2.0+** e **TypeScript 4.9.5+** como peer dependencies.
 ## Etapa 5 — Adicionar componente de verificação
 
 ```tsx
-// src/components/VerificaIdade.tsx
+// src/components/VerificaDocsCredito.tsx
 import { OpenID4VPVerification } from '@mosip/react-inji-verify-sdk';
 
 // Substitua pela URL do seu INJI Verify Service
@@ -98,10 +98,10 @@ const CLIENT_ID_DID = 'did:web:abc123.ngrok-free.app:v1:verify';
 // Presentation Definition para credencial verificável
 // Substitua pela definição fornecida no seu credenciamento
 const presentationDefinition = {
-  id: 'age-verification-18-plus',
+  id: 'CCIR',
   input_descriptors: [
     {
-      id: 'age_credential',
+      id: 'ccir',
       format: {
         'vc+sd-jwt': {
           'sd-jwt_alg_values': ['ES256']
@@ -110,10 +110,10 @@ const presentationDefinition = {
       constraints: {
         fields: [
           {
-            path: ['$.ageOver18'],
+            path: ['$.id'],
             filter: {
-              type: 'boolean',
-              const: true
+              type: 'string',
+              const: "<id>"
             }
           }
         ]
@@ -122,7 +122,7 @@ const presentationDefinition = {
   ]
 };
 
-export function VerificaIdade() {
+export function VerificaDocsCredito() {
   const handleVerificado = (txnId: string) => {
     console.log('Verificação concluída. Transaction ID:', txnId);
     // Busque o resultado no seu backend se necessário
@@ -184,7 +184,7 @@ Se preferir receber o resultado diretamente (sem buscar no backend), use `onVpPr
   onVpProcessed={(results) => {
     // results: Array<{ vc: unknown, vcStatus: "SUCCESS" | "INVALID" | "EXPIRED" }>
     const verificado = results.some(r => r.vcStatus === 'SUCCESS');
-    console.log('Idade verificada:', verificado);
+    console.log('CCIR verificado:', verificado);
   }}
   onError={(error) => console.error(error)}
   onQrCodeExpired={() => console.log('QR expirou')}

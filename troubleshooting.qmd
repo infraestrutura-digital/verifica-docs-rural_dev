@@ -80,7 +80,7 @@ Usuário escaneia o QR Code mas a Carteira Digital não responde.
 
 | Causa | Solução |
 |-------|---------|
-| Carteira Digital não instalada | Orientar o usuário a instalar a INJI Wallet |
+| Carteira Digital não instalada | Orientar o usuário a instalar a Carteira Digital |
 | INJI Verify Service inacessível pelo celular | Verificar que `INJI_VP_SUBMISSION_BASE_URL` é um domínio público |
 | DID não resolve | Verificar `INJI_DID_VERIFY_URI` corresponde ao domínio público |
 | URL expirada | Sessão expirou; iniciar nova verificação |
@@ -99,7 +99,7 @@ No celular, o link `openid4vp://...` não abre nada.
 
 ### Soluções
 
-- INJI Wallet não instalada → instalar a Carteira Digital
+- Carteira Digital não instalada → instalar a Carteira Digital
 - Navegador bloqueia o scheme → testar em Chrome/Safari
 - App não registrou o scheme → verificar se a versão da Wallet suporta `openid4vp://`
 

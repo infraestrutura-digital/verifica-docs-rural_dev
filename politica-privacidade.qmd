@@ -36,8 +36,7 @@ O Aplicativo acessa a câmera exclusivamente para leitura de QR Codes durante o 
 | Dado | Finalidade | Armazenamento |
 |------|-----------|---------------|
 | Dados Gov.br (nome, CPF, e-mail) | Autenticação e emissão de credenciais | Local no dispositivo (criptografado) |
-| Credenciais verificáveis | Comprovação de maioridade quando solicitado | Local no dispositivo (criptografado) |
-| Biometria | Autorização de compartilhamento | Apenas no sistema operacional |
+| Credenciais verificáveis | Documentos para Crédito Rural quando solicitado | Local no dispositivo (criptografado) |
 | Câmera | Leitura de QR Code | Sem armazenamento |
 
 ## 3. Compartilhamento de dados
@@ -88,7 +87,6 @@ Em conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018), vo
 | Permissão | Motivo |
 |-----------|--------|
 | `CAMERA` | Leitura de QR Codes para verificação |
-| `USE_BIOMETRIC` / `USE_FINGERPRINT` | Autenticação biométrica para autorizar compartilhamento |
 | `INTERNET` | Comunicação com serviços de autenticação e verificação |
 
 ## 8. Alterações nesta política

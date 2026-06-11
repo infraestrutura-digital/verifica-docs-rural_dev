@@ -10,8 +10,8 @@ Garantir que a integração siga boas práticas de segurança e esteja em confor
 
 | Princípio | Aplicação |
 |-----------|-----------|
-| **Minimização de dados** | Com SD-JWT, o cidadão revela apenas `ageOver18`, não a data de nascimento |
-| **Finalidade** | Use o resultado apenas para controle de acesso por idade |
+| **Minimização de dados** | Com SD-JWT, o cidadão revela apenas `CCIR, CAF, Recibo do CAR, Demonstrativo do CAR`, nada além disso |
+| **Finalidade** | Use o resultado apenas para fins de análise de crédito rural |
 | **Não armazenamento** | Não armazene a credencial do cidadão |
 | **Transparência** | Informe ao usuário o que está sendo verificado |
 
@@ -106,9 +106,9 @@ Esses campos são estruturais do SD-JWT e não contêm dados pessoais.
 
 Antes de iniciar a verificação, informe ao usuário:
 
-- **O que** está sendo verificado (idade >= 18)
+- **O que** está sendo verificado (documentos de crédito rural)
 - **Quem** é o verificador (sua organização)
-- Que **nenhum dado pessoal** além de `ageOver18` é compartilhado
+- Que **nenhum dado pessoal** além de `CCIR, CAF, Recibo do CAR, Demonstrativo do CAR` é compartilhado
 - Que o cidadão **autoriza ativamente** na Carteira Digital
 
 ## Próximo passo

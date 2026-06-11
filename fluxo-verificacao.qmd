@@ -15,16 +15,16 @@ sequenceDiagram
     participant VS as INJI Verify Service
     participant W as Carteira Digital (Celular)
 
-    U->>SDK: Clica "Verificar Idade"
+    U->>SDK: Clica "Verificar Documentos de Crédito Rural"
     SDK->>VS: POST /v1/verify/vp-request
     VS-->>SDK: requestId + authorizationUrl
     SDK->>U: Exibe QR Code (authorizationUrl)
     U->>W: Escaneia QR Code com a Carteira
     W->>VS: Apresenta credencial (VP submission)
-    VS->>VS: Valida credencial + policy 18+
+    VS->>VS: Valida credencial + CCIR + CAF + Recibo CAR + Demonstrativo CAR
     Note over SDK,VS: SDK faz long-polling em /vp-request/{id}/status
     VS-->>SDK: Resultado da verificação
-    SDK->>U: "Idade verificada!" (callback)
+    SDK->>U: "Documentos verificados!" (callback)
 ```
 
 ## Fluxo Same-Device (Deep Link — Mobile)
@@ -36,7 +36,7 @@ sequenceDiagram
     participant VS as INJI Verify Service
     participant W as Carteira Digital
 
-    U->>SDK: Toca "Verificar Idade"
+    U->>SDK: Toca "Verificar Documentos de Crédito Rural"
     SDK->>VS: POST /v1/verify/vp-request
     VS-->>SDK: requestId + authorizationUrl
     SDK->>W: Abre Deep Link (openid4vp://...)
@@ -44,7 +44,7 @@ sequenceDiagram
     Note over W: Usuário volta ao app
     SDK->>VS: Long-polling /vp-request/{id}/status
     VS-->>SDK: Resultado da verificação
-    SDK->>U: "Idade verificada!" (callback)
+    SDK->>U: "Documentos verificados!" (callback)
 ```
 
 ## O que o SDK faz internamente

@@ -91,7 +91,7 @@ Note `127.0.0.1:8080:8080` e `127.0.0.1:5432:5432` — isso garante que ambos os
 ## Nginx como Reverse Proxy
 
 ```nginx
-# /etc/nginx/sites-available/verificaidade
+# /etc/nginx/sites-available/verificadocscredito
 server {
     listen 443 ssl;
     server_name verify.seu-dominio.com.br;
@@ -120,7 +120,7 @@ server {
 ```
 
 ```bash
-sudo ln -s /etc/nginx/sites-available/verificaidade /etc/nginx/sites-enabled/
+sudo ln -s /etc/nginx/sites-available/verificadocscredito /etc/nginx/sites-enabled/
 sudo nginx -t
 sudo systemctl reload nginx
 ```
@@ -149,7 +149,7 @@ HEALTH=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:8080/v1/verify/
 
 if [ "$HEALTH" != "200" ]; then
   echo "$(date) ALERTA: INJI Verify Service indisponível (HTTP $HEALTH)" \
-    >> /var/log/verificaidade-monitor.log
+    >> /var/log/verificadocscredito-monitor.log
 fi
 ```
 

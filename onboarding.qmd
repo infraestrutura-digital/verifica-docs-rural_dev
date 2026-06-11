@@ -67,7 +67,7 @@ Nunca use o keystore de teste (`test.p12`) em produção. Gere um keystore próp
 
 ### Passo 1 — Solicitar acesso
 
-Entre em contato com o órgão responsável pelo VerificaIdade.
+Entre em contato com o órgão responsável pelas Credenciais Verificáveis.
 
 ### Passo 2 — Receber acesso ao portal
 
@@ -95,4 +95,4 @@ Use credenciais de teste para validar o fluxo completo antes de ir para produç�
 
 ## Dúvidas sobre Onboarding
 
-O processo de onboarding é gerenciado pelo órgão responsável pelo VerificaIdade. Consulte a documentação fornecida no credenciamento.
+O processo de onboarding é gerenciado pelo órgão responsável pelas Credenciais Verificáveis. Consulte a documentação fornecida no credenciamento.

@@ -23,8 +23,8 @@ O container `verify-ui` é a interface de referência do INJI. Se você está in
 ## Passo 1 — Criar estrutura de diretórios
 
 ```bash
-mkdir -p ~/verificaidade/db-init
-cd ~/verificaidade
+mkdir -p ~/verificadocscredito/db-init
+cd ~/verificadocscredito
 ```
 
 ## Passo 2 — Obter scripts de inicialização do banco

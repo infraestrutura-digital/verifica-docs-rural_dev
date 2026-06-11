@@ -15,7 +15,7 @@ sequenceDiagram
     participant VS as INJI Verify Service
     participant W as Carteira Digital
 
-    U->>SDK: Toca "Verificar Idade"
+    U->>SDK: Toca "Verificar Documentos de Crédito Rural"
     SDK->>VS: POST /v1/verify/vp-request
     VS-->>SDK: requestId + authorizationUrl
     SDK->>W: Redireciona via Deep Link (openid4vp://...)
@@ -42,11 +42,11 @@ A prop `isSameDeviceFlowEnabled` controla esse comportamento (padrão: `true`).
 ## Passo 1 — O mesmo componente funciona
 
 ```tsx
-// src/components/VerificaIdade.tsx
+// src/components/VerificaDocsCredito.tsx
 // O MESMO código da integração Web funciona no mobile!
 import { OpenID4VPVerification } from '@mosip/react-inji-verify-sdk';
 
-export function VerificaIdade() {
+export function VerificaDocsCredito() {
   return (
     <OpenID4VPVerification
       verifyServiceUrl="<VERIFY_BASE_URL>/v1/verify"
@@ -121,7 +121,7 @@ Se a Carteira Digital não estiver instalada, o Deep Link não abrirá nada. Tra
   // ...
   onError={(error) => {
     // Informar o usuário para instalar a Carteira Digital
-    alert('Instale a Carteira Digital para verificar sua idade.');
+    alert('Instale a Carteira Digital para verificar seus documentos de Crédito Rural.');
   }}
 />
 ```
