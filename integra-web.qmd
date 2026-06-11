@@ -4,7 +4,7 @@ title: "Integração Web (QR Code)"
 
 ## Objetivo
 
-Implementar verificação de idade em uma aplicação Web React usando QR Code (fluxo cross-device).
+Implementar uso de credenciais verificáveis em uma aplicação Web React usando QR Code (fluxo cross-device).
 
 ## Fluxo Web
 

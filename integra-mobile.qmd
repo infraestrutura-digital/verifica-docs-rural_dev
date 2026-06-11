@@ -4,7 +4,7 @@ title: "Integração Mobile (Deep Link)"
 
 ## Objetivo
 
-Implementar verificação de idade em um app web mobile usando Deep Link (fluxo same-device).
+Implementar uso de credenciais verificáveis em um app web mobile usando Deep Link (fluxo same-device).
 
 ## Fluxo Mobile
 

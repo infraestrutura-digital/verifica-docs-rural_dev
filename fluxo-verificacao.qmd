@@ -4,7 +4,7 @@ title: "Fluxo de Verificação (Visão Geral)"
 
 ## Objetivo
 
-Entender o ciclo completo de uma verificação de idade, do início ao resultado.
+Entender o ciclo completo de uso de uma credencial verificável, do início ao resultado.
 
 ## Fluxo Ponta a Ponta (Cross-Device — QR Code)
 

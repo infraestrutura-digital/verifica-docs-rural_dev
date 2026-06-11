@@ -29,7 +29,7 @@ O Aplicativo pode solicitar autenticação biométrica (impressão digital ou re
 
 ### 1.4 Câmera
 
-O Aplicativo acessa a câmera exclusivamente para leitura de QR Codes durante o fluxo de verificação de idade. Nenhuma imagem ou vídeo é capturado ou armazenado.
+O Aplicativo acessa a câmera exclusivamente para leitura de QR Codes durante o fluxo de validação da credencial verificável. Nenhuma imagem ou vídeo é capturado ou armazenado.
 
 ## 2. Como usamos seus dados
 
@@ -44,7 +44,7 @@ O Aplicativo acessa a câmera exclusivamente para leitura de QR Codes durante o 
 
 ### 3.1 Princípio de minimização
 
-Quando você autoriza uma verificação de idade, o Aplicativo compartilha **apenas** a informação de que você é maior de 18 anos (`ageOver18: true`). Sua data de nascimento, CPF, nome e demais dados pessoais **não são compartilhados** com o solicitante.
+Quando você autoriza uso de uma credencial verificável, o Aplicativo compartilha **apenas** a informação contida nela. Sua data de nascimento, CPF, nome e demais dados pessoais **não são compartilhados** com o solicitante.
 
 ### 3.2 Consentimento explícito
 

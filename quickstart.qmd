@@ -4,7 +4,7 @@ title: "Integre rapidamente"
 
 ## Objetivo
 
-Sair do zero até uma verificação de idade funcionando em ambiente de desenvolvimento.
+Sair do zero até uma credencial verificável funcionando em ambiente de desenvolvimento.
 
 ## Checklist
 
@@ -95,7 +95,7 @@ const VERIFY_SERVICE_URL = 'https://abc123.ngrok-free.app/v1/verify';
 // Substitua pelo DID do seu verificador
 const CLIENT_ID_DID = 'did:web:abc123.ngrok-free.app:v1:verify';
 
-// Presentation Definition para verificação de idade 18+
+// Presentation Definition para credencial verificável
 // Substitua pela definição fornecida no seu credenciamento
 const presentationDefinition = {
   id: 'age-verification-18-plus',
@@ -139,7 +139,7 @@ export function VerificaIdade() {
 
   return (
     <div>
-      <h2>Verificação de Idade</h2>
+      <h2>Credencial Verificável</h2>
       <OpenID4VPVerification
         verifyServiceUrl={VERIFY_SERVICE_URL}
         clientId={CLIENT_ID_DID}

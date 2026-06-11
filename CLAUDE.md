@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Developer portal ("Portal do Desenvolvedor") for **VerificaIdade** — age verification (18+) using **INJI Verify**. Static documentation site built with **Quarto**, written entirely in Portuguese (pt-BR).
+Developer portal ("Portal do Desenvolvedor") for **Verifiable Credentials** — using **INJI Verify**. Static documentation site built with **Quarto**, written entirely in Portuguese (pt-BR).
 
 The integration architecture is:
 

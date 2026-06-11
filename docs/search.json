@@ -330,8 +330,8 @@
     ]
   },
   {
-    "objectID": "policy18.html",
-    "href": "policy18.html",
+    "objectID": "policy-credito-rural.html",
+    "href": "policy-credito-rural.html",
     "title": "Policy Documentos de Crédito Rural",
     "section": "",
     "text": "Entender como configurar a Presentation Definition para documentos necessários para o crédito rural usando o padrão OpenID4VP.",
@@ -341,8 +341,8 @@
     ]
   },
   {
-    "objectID": "policy18.html#objetivo",
-    "href": "policy18.html#objetivo",
+    "objectID": "policy-credito-rural.html#objetivo",
+    "href": "policy-credito-rural.html#objetivo",
     "title": "Policy Documentos de Crédito Rural",
     "section": "",
     "text": "Entender como configurar a Presentation Definition para documentos necessários para o crédito rural usando o padrão OpenID4VP.",
@@ -352,8 +352,8 @@
     ]
   },
   {
-    "objectID": "policy18.html#o-que-é-uma-presentation-definition",
-    "href": "policy18.html#o-que-é-uma-presentation-definition",
+    "objectID": "policy-credito-rural.html#o-que-é-uma-presentation-definition",
+    "href": "policy-credito-rural.html#o-que-é-uma-presentation-definition",
     "title": "Policy Documentos de Crédito Rural",
     "section": "O que é uma Presentation Definition?",
     "text": "O que é uma Presentation Definition?\nA Presentation Definition (PD) é um documento JSON que descreve quais credenciais e campos você quer que o cidadão apresente. Ela segue o padrão DIF Presentation Exchange.\nNo caso do verifica-docs-rural, a PD solicita uma credencial dos documentos CAF, Recibo do CAR, Demonstrativo do CAR e CCIR.",
@@ -363,30 +363,30 @@
     ]
   },
   {
-    "objectID": "policy18.html#presentation-definition-para-os-documentos-caf-recibo-do-car-demonstrativo-do-car-e-ccir",
-    "href": "policy18.html#presentation-definition-para-os-documentos-caf-recibo-do-car-demonstrativo-do-car-e-ccir",
+    "objectID": "policy-credito-rural.html#presentation-definition-para-os-documentos-caf-recibo-do-car-demonstrativo-do-car-e-ccir",
+    "href": "policy-credito-rural.html#presentation-definition-para-os-documentos-caf-recibo-do-car-demonstrativo-do-car-e-ccir",
     "title": "Policy Documentos de Crédito Rural",
     "section": "Presentation Definition para os documentos CAF, Recibo do CAR, Demonstrativo do CAR e CCIR:",
-    "text": "Presentation Definition para os documentos CAF, Recibo do CAR, Demonstrativo do CAR e CCIR:\n{\n  \"id\": \"age-verification-18-plus\",\n  \"input_descriptors\": [\n    {\n      \"id\": \"age_credential\",\n      \"format\": {\n        \"vc+sd-jwt\": {\n          \"sd-jwt_alg_values\": [\"ES256\"]\n        }\n      },\n      \"constraints\": {\n        \"fields\": [\n          {\n            \"path\": [\"$.ageOver18\"],\n            \"filter\": {\n              \"type\": \"boolean\",\n              \"const\": true\n            }\n          }\n        ]\n      }\n    }\n  ]\n}\n\n\n\n\n\n\nImportante\n\n\n\nEsta é uma Presentation Definition ilustrativa. A definição exata depende do tipo de credencial emitida pelo governo e do formato suportado. Consulte a documentação do emissor para os campos corretos.",
+    "text": "Presentation Definition para os documentos CAF, Recibo do CAR, Demonstrativo do CAR e CCIR:\n\"presentationDefinition\": {\n \"id\": \"c4822b58-7fb4-454e-b827-f8758fe27f9a\",\n \"purpose\": \"Relying party is requesting your CAR Document, CAR Receipt, and CCIR Document\",\n \"format\": {\n \"ldp_vc\": {\n \"proof_type\": [\n \"Ed25519Signature2020\"\n ]\n7\n \n}\n },\n \"input_descriptors\"\n:\n[\n \n{\n \"id\"\n: \"CAR Document\"\n,\n \"format\"\n:\n{\n \"ldp_vc\"\n:\n{\n \"proof_type\"\n:\n[\n \"Ed25519Signature2020\"\n \n]\n \n}\n },\n \"constraints\"\n:\n{\n \"fields\"\n:\n[\n \n{\n \"path\"\n:\n[\n \"$.type\"\n ],\n \"filter\"\n:\n{\n \"type\"\n: \"object\"\n,\n \"pattern\"\n: \"CARDocument\"\n \n}\n \n}\n \n]\n \n}\n },\n \n{\n \"id\"\n: \"CAR Receipt\"\n,\n \"format\"\n:\n{\n \"ldp_vc\"\n:\n{\n \"proof_type\"\n:\n[\n \"Ed25519Signature2020\"\n \n]\n \n}\n },\n \"constraints\"\n:\n{\n \"fields\"\n:\n[\n \n{\n \"path\"\n:\n[\n \"$.type\"\n ],\n \"filter\"\n:\n{\n \"type\"\n: \"object\"\n,\n \"pattern\"\n: \"CARReceipt\"\n \n}\n \n}\n \n]\n \n}\n },\n \n{\n \"id\"\n: \"CCIR\"\n,\n \"format\"\n:\n{\n \"ldp_vc\"\n:\n{\n \"proof_type\"\n:\n[\n \"Ed25519Signature2020\"\n \n]\n \n}\n },\n \"constraints\"\n:\n{\n \"fields\"\n:\n[\n8\n {\n \"path\": [\n \"$.type\"\n ],\n \"filter\": {\n \"type\": \"object\",\n \"pattern\": \"CCIR\"\n }\n }\n ]\n }\n }\n}\n\n\n\n\n\n\nImportante\n\n\n\nEsta é uma Presentation Definition ilustrativa. A definição exata depende do tipo de credencial emitida pelo governo e do formato suportado. Consulte a documentação do emissor para os campos corretos.",
     "crumbs": [
       "Referência",
       "Policy Documentos de Crédito Rural"
     ]
   },
   {
-    "objectID": "policy18.html#como-usar-no-sdk",
-    "href": "policy18.html#como-usar-no-sdk",
+    "objectID": "policy-credito-rural.html#como-usar-no-sdk",
+    "href": "policy-credito-rural.html#como-usar-no-sdk",
     "title": "Policy Documentos de Crédito Rural",
     "section": "Como usar no SDK",
-    "text": "Como usar no SDK\n\nOpção 1 — Inline (passar diretamente)\n&lt;OpenID4VPVerification\n  // ...\n  presentationDefinition={{\n    id: 'age-verification-18-plus',\n    input_descriptors: [/* ... */]\n  }}\n/&gt;\n\n\nOpção 2 — Pré-cadastrada no Service\nSe a Presentation Definition estiver cadastrada no INJI Verify Service, use o ID:\n&lt;OpenID4VPVerification\n  // ...\n  presentationDefinitionId=\"age-verification-18-plus\"\n/&gt;\n\n\n\n\n\n\nAviso\n\n\n\nUse uma ou outra opção, nunca ambas. O SDK rejeita se ambas forem fornecidas.",
+    "text": "Como usar no SDK\n\nOpção 1 — Inline (passar diretamente)\n&lt;OpenID4VPVerification\n  // ...\n  presentationDefinition={{\n    id: 'CCIR',\n    input_descriptors: [/* ... */]\n  }}\n/&gt;\n\n\nOpção 2 — Pré-cadastrada no Service\nSe a Presentation Definition estiver cadastrada no INJI Verify Service, use o ID (pode ser qualquer um dos definidos acima):\n&lt;OpenID4VPVerification\n  // ...\n  presentationDefinitionId=\"CCIR\"\n/&gt;\n\n\n\n\n\n\nAviso\n\n\n\nUse uma ou outra opção, nunca ambas. O SDK rejeita se ambas forem fornecidas.",
     "crumbs": [
       "Referência",
       "Policy Documentos de Crédito Rural"
     ]
   },
   {
-    "objectID": "policy18.html#o-que-você-recebe",
-    "href": "policy18.html#o-que-você-recebe",
+    "objectID": "policy-credito-rural.html#o-que-você-recebe",
+    "href": "policy-credito-rural.html#o-que-você-recebe",
     "title": "Policy Documentos de Crédito Rural",
     "section": "O que você recebe",
     "text": "O que você recebe\n\nVerificação com sucesso\n[\n  {\n    \"vc\": { \"...conteúdo da credencial...\" },\n    \"vcStatus\": \"SUCCESS\"\n  }\n]\n\n\nCredencial inválida\n[\n  {\n    \"vc\": { \"...conteúdo da credencial...\" },\n    \"vcStatus\": \"INVALID\"\n  }\n]\n\n\nCredencial expirada\n[\n  {\n    \"vc\": { \"...conteúdo da credencial...\" },\n    \"vcStatus\": \"EXPIRED\"\n  }\n]",
@@ -396,8 +396,8 @@
     ]
   },
   {
-    "objectID": "policy18.html#o-que-o-inji-verify-service-valida",
-    "href": "policy18.html#o-que-o-inji-verify-service-valida",
+    "objectID": "policy-credito-rural.html#o-que-o-inji-verify-service-valida",
+    "href": "policy-credito-rural.html#o-que-o-inji-verify-service-valida",
     "title": "Policy Documentos de Crédito Rural",
     "section": "O que o INJI Verify Service valida",
     "text": "O que o INJI Verify Service valida\n\nAssinatura criptográfica — a credencial foi emitida por um emissor confiável?\nFormato — a credencial segue o padrão esperado (SD-JWT, CWT)?\nExpiração — a credencial ainda é válida?\nRevogação — a credencial foi revogada?\nConstraints — os campos solicitados na PD foram satisfeitos?",
@@ -407,8 +407,8 @@
     ]
   },
   {
-    "objectID": "policy18.html#minimização-de-dados",
-    "href": "policy18.html#minimização-de-dados",
+    "objectID": "policy-credito-rural.html#minimização-de-dados",
+    "href": "policy-credito-rural.html#minimização-de-dados",
     "title": "Policy Documentos de Crédito Rural",
     "section": "Minimização de dados",
     "text": "Minimização de dados\nA Presentation Definition solicita apenas os campos necessários dos documentos. Usando SD-JWT (Selective Disclosure), o cidadão pode apresentar apenas esses campos sem revelar nome, data de nascimento ou outros dados pessoais.\n\n\n\n\n\n\nNota\n\n\n\nIsso é privacy by design. Você confirma os dados das propriedades do agricultor sem saber qualquer outro dado pessoal.",
@@ -418,8 +418,8 @@
     ]
   },
   {
-    "objectID": "policy18.html#próximo-passo",
-    "href": "policy18.html#próximo-passo",
+    "objectID": "policy-credito-rural.html#próximo-passo",
+    "href": "policy-credito-rural.html#próximo-passo",
     "title": "Policy Documentos de Crédito Rural",
     "section": "Próximo passo",
     "text": "Próximo passo\nEntenda as práticas de Segurança e LGPD.",
@@ -433,7 +433,7 @@
     "href": "integra-web.html",
     "title": "Integração Web (QR Code)",
     "section": "",
-    "text": "Implementar verificação de idade em uma aplicação Web React usando QR Code (fluxo cross-device).",
+    "text": "Implementar credencial verificável em uma aplicação Web React usando QR Code (fluxo cross-device).",
     "crumbs": [
       "Integração",
       "Integração Web (QR Code)"
@@ -444,7 +444,7 @@
     "href": "integra-web.html#objetivo",
     "title": "Integração Web (QR Code)",
     "section": "",
-    "text": "Implementar verificação de idade em uma aplicação Web React usando QR Code (fluxo cross-device).",
+    "text": "Implementar credencial verificável em uma aplicação Web React usando QR Code (fluxo cross-device).",
     "crumbs": [
       "Integração",
       "Integração Web (QR Code)"
@@ -934,7 +934,7 @@
     "href": "index.html#pré-requisitos",
     "title": "Boas-vindas",
     "section": "Pré-requisitos",
-    "text": "Pré-requisitos\n\nAcesso a uma VM com Docker para rodar o INJI Verify Service ? Credenciais de acesso ao gateway (obtidas no Onboarding)\n\n\n\n\n\n\n\nNota\n\n\n\nO objetivo é que um desenvolvedor experiente consiga integrar rapidamente. Comece pelo Integre rapidamente.",
+    "text": "Pré-requisitos\n\nAcesso a uma VM com Docker para rodar o INJI Verify Service ? Credenciais de acesso ao gateway (obtidas no Onboarding)\n\n\n\n\n\n\n\nNota\n\n\n\nO objetivo é que um desenvolvedor experiente consiga integrar em rapidamente. Comece pelo Integre rapidamente.",
     "crumbs": [
       "Boas-vindas"
     ]
@@ -1054,7 +1054,7 @@
     "href": "integra-mobile.html#próximo-passo",
     "title": "Integração Mobile (Deep Link)",
     "section": "Próximo passo",
-    "text": "Próximo passo\nEntenda a Policy 18+ e como configurar a Presentation Definition.",
+    "text": "Próximo passo\nEntenda a Policy de Crédito Rural e como configurar a Presentation Definition.",
     "crumbs": [
       "Integração",
       "Integração Mobile (Deep Link)"
@@ -1296,7 +1296,7 @@
     "href": "quickstart.html#checklist",
     "title": "Integre rapidamente",
     "section": "Checklist",
-    "text": "Checklist\n\n\n\n\n\n\n\n\n\n#\nEtapa\nTempo\nResultado esperado\n\n\n\n\n1\nPreparar VM com Docker\n10 min\ndocker compose version funciona\n\n\n2\nSubir INJI Verify Service\n10 min\nHealth check retorna UP\n\n\n3\nExpor o Service publicamente\n5 min\nCarteira Digital alcança o Service\n\n\n4\nInstalar o SDK no projeto React\n5 min\n@mosip/react-inji-verify-sdk instalado\n\n\n5\nAdicionar componente de verificação\n15 min\nQR Code exibido na tela\n\n\n6\nTestar ponta a ponta\n15 min\nCredencial verificada com sucesso",
+    "text": "Checklist\n\n\n\n\n\n\n\n\n\n#\nEtapa\nTempos típicos\nResultado esperado\n\n\n\n\n1\nPreparar VM com Docker\n10 min\ndocker compose version funciona\n\n\n2\nSubir INJI Verify Service\n10 min\nHealth check retorna UP\n\n\n3\nExpor o Service publicamente\n5 min\nCarteira Digital alcança o Service\n\n\n4\nInstalar o SDK no projeto React\n5 min\n@mosip/react-inji-verify-sdk instalado\n\n\n5\nAdicionar componente de verificação\n15 min\nQR Code exibido na tela\n\n\n6\nTestar ponta a ponta\n15 min\nCredencial verificada com sucesso",
     "crumbs": [
       "Início Rápido",
       "Integre rapidamente"
