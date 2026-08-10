@@ -42,7 +42,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-346afd1856ca820ea9bf8501d05cbecf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-55a229089d14938623797807ac366610.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -137,7 +137,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./quickstart.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Integre rapidamente</span></a>
+ <span class="menu-text">Integre em 1 Hora</span></a>
   </div>
 </li>
       </ul>
@@ -304,17 +304,18 @@ ul.task-list li input[type="checkbox"] {
     end
 
     subgraph verificador["🔍 Verificador — você"]
-        B["🌐 App React&lt;br&gt;+ INJI Verify SDK"]
-        C["⚙️ INJI Verify Service&lt;br&gt;Spring Boot · PostgreSQL&lt;br&gt;Docker · VM"]
+        B["📱 App Mobile&lt;br&gt;(React Native + Expo)"]
+        C["⚙️ INJI Verify Service&lt;br&gt;Spring Boot · PostgreSQL 15&lt;br&gt;Docker · VM"]
     end
 
     subgraph governo["🏛️ Governo"]
         E["🏢 Emissor de&lt;br&gt;Credenciais"]
     end
 
-    B &lt;--&gt;|"REST API&lt;br&gt;(verifyServiceUrl)"| C
-    C &lt;--&gt;|"OpenID4VP&lt;br&gt;(VP submission)"| A
-    B -.-&gt;|"QR Code / Deep Link&lt;br&gt;(authorizationUrl)"| A
+    B --&gt;|"POST /vp-request&lt;br&gt;(REST API)"| C
+    C --&gt;|"polling /status&lt;br&gt;+ /vp-result"| B
+    C &lt;--&gt;|"OpenID4VP&lt;br&gt;(direct_post)"| A
+    B -.-&gt;|"Deep Link&lt;br&gt;(openid4vp://authorize)"| A
     E &lt;-.-&gt;|"OpenID4VCI"| A
 
     classDef estiloCidadao fill:#ffffff,stroke:#2563eb,color:#1e3a8a
@@ -357,25 +358,25 @@ ul.task-list li input[type="checkbox"] {
 <td><strong>Carteira Digital</strong></td>
 <td>Cidadão</td>
 <td>INJI Wallet (app mobile)</td>
-<td>Armazena a credencial de idade emitida pelo governo</td>
+<td>Armazena as credenciais rurais (CCIR, CAR) emitidas pelo governo</td>
 </tr>
 <tr class="even">
-<td><strong>App React + SDK</strong></td>
+<td><strong>App Mobile</strong></td>
 <td>Verificador (você)</td>
-<td>React 18 + <code>@mosip/react-inji-verify-sdk</code></td>
-<td>Componentes React que gerenciam o fluxo de verificação</td>
+<td>React Native + Expo</td>
+<td>App que orquestra o fluxo: cria VP Request, abre a carteira via Deep Link e faz polling do resultado</td>
 </tr>
 <tr class="odd">
 <td><strong>INJI Verify Service</strong></td>
 <td>Verificador (você)</td>
-<td>Java 21, Spring Boot 3.2, PostgreSQL 13</td>
-<td>Backend que valida criptograficamente a credencial via OpenID4VP</td>
+<td>Java 21, Spring Boot 3.2, PostgreSQL 15</td>
+<td>Backend que valida criptograficamente as credenciais via OpenID4VP</td>
 </tr>
 <tr class="even">
 <td><strong>Emissor</strong></td>
 <td>Governo</td>
 <td>—</td>
-<td>Emitiu a credencial. Não participa do fluxo em tempo real</td>
+<td>Emitiu as credenciais. Não participa do fluxo em tempo real</td>
 </tr>
 </tbody>
 </table>
@@ -383,20 +384,20 @@ ul.task-list li input[type="checkbox"] {
 <section id="como-os-componentes-se-comunicam" class="level2">
 <h2 class="anchored" data-anchor-id="como-os-componentes-se-comunicam">Como os componentes se comunicam</h2>
 <ol type="1">
-<li>O <strong>SDK React</strong> chama o <strong>INJI Verify Service</strong> via REST API para criar uma solicitação de verificação (VP Request)</li>
-<li>O SDK exibe um <strong>QR Code</strong> (desktop) ou abre um <strong>Deep Link</strong> (mobile) contendo a URL de autorização</li>
-<li>O cidadão abre a <strong>Carteira Digital</strong>, que se comunica diretamente com o <strong>INJI Verify Service</strong> para apresentar a credencial</li>
-<li>O SDK faz <strong>long-polling</strong> no Service até receber o resultado</li>
-<li>O resultado chega ao SDK via callback (<code>onVpReceived</code> ou <code>onVpProcessed</code>)</li>
+<li>O <strong>App Mobile</strong> chama o <strong>INJI Verify Service</strong> via REST API (<code>POST /v1/verify/vp-request</code>) para criar uma solicitação de verificação</li>
+<li>O app abre a <strong>Carteira Digital</strong> via <strong>Deep Link</strong> (<code>openid4vp://authorize?...</code>) com os parâmetros da solicitação</li>
+<li>O cidadão autoriza na <strong>Carteira Digital</strong>, que envia a VP diretamente ao <strong>INJI Verify Service</strong> via <code>direct_post</code></li>
+<li>O app faz <strong>polling</strong> em <code>GET /v1/verify/vp-request/{requestId}/status</code> até receber <code>VP_SUBMITTED</code></li>
+<li>O app busca o resultado em <code>GET /v1/verify/vp-result/{transactionId}</code> e lê as credenciais verificadas (<code>CCIRCredential</code>, <code>CARReceipt</code>, <code>CARDocument</code>)</li>
 </ol>
 </section>
 <section id="regras-fundamentais" class="level2">
 <h2 class="anchored" data-anchor-id="regras-fundamentais">Regras Fundamentais</h2>
 <ol type="1">
-<li><strong>Não é necessário um backend customizado</strong> — o INJI Verify SDK e o INJI Verify Service fazem toda a orquestração.</li>
+<li>O app constrói e envia o Deep Link diretamente, sem biblioteca intermediária.</li>
 <li>O INJI Verify Service roda <strong>dentro da sua infraestrutura</strong> (sua VM, via Docker).</li>
-<li>A Carteira Digital do cidadão precisa <strong>acessar o INJI Verify Service pela internet</strong> — o Service precisa de um domínio público.</li>
-<li>O governo <strong>não participa</strong> da verificação em tempo real — a credencial já está com o cidadão.</li>
+<li>A Carteira Digital do cidadão precisa <strong>acessar o INJI Verify Service pela internet</strong>, o Service precisa de um domínio público.</li>
+<li>O governo <strong>não participa</strong> da verificação em tempo real, as credenciais já estão com o cidadão.</li>
 <li>A identidade do verificador é baseada em <strong>DID Web</strong> (<code>did:web:seu-dominio.com.br:v1:verify</code>).</li>
 </ol>
 <div class="callout callout-style-default callout-important callout-titled">

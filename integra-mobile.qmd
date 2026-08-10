@@ -4,138 +4,316 @@ title: "Integração Mobile (Deep Link)"
 
 ## Objetivo
 
-Implementar uso de credenciais verificáveis em um app web mobile usando Deep Link (fluxo same-device).
+Implementar verificação de credenciais rurais em um **app React Native (Expo)** usando Deep Link — o app abre a Carteira Digital diretamente no dispositivo (fluxo same-device).
 
 ## Fluxo Mobile
 
 ```{mermaid}
 sequenceDiagram
-    participant U as Usuário (Celular)
-    participant SDK as App React + SDK
+    participant U as Usuário
+    participant App as App React Native
     participant VS as INJI Verify Service
-    participant W as Carteira Digital
+    participant W as INJI Wallet
 
-    U->>SDK: Toca "Verificar Documentos de Crédito Rural"
-    SDK->>VS: POST /v1/verify/vp-request
-    VS-->>SDK: requestId + authorizationUrl
-    SDK->>W: Redireciona via Deep Link (openid4vp://...)
-    W->>VS: POST /v1/verify/vp-submission
-    Note over W: Usuário volta ao app
-    SDK->>VS: Long-polling /vp-request/{id}/status
-    VS-->>SDK: Resultado
-    SDK->>U: Callback executado
+    U->>App: Toca "Verificar documentos e solicitar crédito"
+    App->>VS: POST /v1/verify/vp-request
+    VS-->>App: transactionId + requestId + requestUri
+    App->>W: Linking.openURL("openid4vp://authorize?...")
+    Note over W: Usuário autoriza credenciais
+    W->>VS: POST /v1/verify/vp-submission (direct_post)
+    App->>App: AppState "active" → retoma polling
+    App->>VS: GET /v1/verify/vp-request/{requestId}/status
+    VS-->>App: VP_SUBMITTED
+    App->>VS: GET /v1/verify/vp-result/{transactionId}
+    VS-->>App: { vpResultStatus: "SUCCESS", vcResults: [...] }
+    App->>U: "Crédito pré-aprovado!"
 ```
 
-## Cenário
+## Pré-requisitos
 
-O usuário está no **celular** acessando seu site via navegador. O SDK detecta que é um dispositivo mobile e, em vez de exibir um QR Code, redireciona automaticamente para a Carteira Digital via Deep Link.
+- Expo SDK 51+ com `expo-linking`
+- `scheme` configurado no `app.json` (necessário para o wallet retornar ao app)
+- INJI Wallet instalado no dispositivo para testes
 
-## Como funciona
+## Passo 1 — Criar o serviço de verificação
 
-O SDK usa o **mesmo componente** `OpenID4VPVerification` — a detecção do dispositivo é automática:
+```ts
+// src/services/verifyService.ts
+import { Linking } from "react-native";
 
-- **Desktop** → renderiza QR Code
-- **Mobile/Tablet** → redireciona via Deep Link (`openid4vp://...`)
+const BASE_URL = "https://<VERIFY_BASE_URL>";
+const CLIENT_ID = "did:web:<SEU_DOMINIO>:v1:verify";
+const ORIGIN = "<seu-app>://";
 
-A prop `isSameDeviceFlowEnabled` controla esse comportamento (padrão: `true`).
+const PRESENTATION_DEFINITION = {
+  id: "imovel-rural-check",
+  input_descriptors: [
+    {
+      id: "CCIRCredential",
+      name: "CCIR - Certificado de Cadastro",
+      purpose: "Verificar cadastro do imóvel rural (CCIR)",
+      constraints: {
+        fields: [
+          {
+            path: ["$.type"],
+            filter: { type: "string", pattern: "CCIRCredential" },
+          },
+        ],
+      },
+    },
+    {
+      id: "CARReceipt",
+      name: "CAR - Recibo de Inscrição",
+      purpose: "Verificar inscrição do imóvel no CAR",
+      constraints: {
+        fields: [
+          {
+            path: ["$.type"],
+            filter: { type: "string", pattern: "CARReceipt" },
+          },
+        ],
+      },
+    },
+    {
+      id: "CARDocument",
+      name: "CAR - Documento",
+      purpose: "Verificar documento do imóvel no CAR",
+      constraints: {
+        fields: [
+          {
+            path: ["$.type"],
+            filter: { type: "string", pattern: "CARDocument" },
+          },
+        ],
+      },
+    },
+  ],
+};
 
-## Passo 1 — O mesmo componente funciona
+export async function createVPRequest(singleCredentialId?: string): Promise<{
+  transactionId: string;
+  requestId: string;
+  deepLinkUrl: string;
+}> {
+  const presentationDef = singleCredentialId
+    ? {
+        id: PRESENTATION_DEFINITION.id,
+        input_descriptors: PRESENTATION_DEFINITION.input_descriptors.filter(
+          (d) => d.id === singleCredentialId
+        ),
+      }
+    : PRESENTATION_DEFINITION;
+
+  const response = await fetch(`${BASE_URL}/v1/verify/vp-request`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ clientId: CLIENT_ID, presentationDefinition: presentationDef }),
+  });
+
+  if (!response.ok) throw new Error(`Falha ao criar VP request (${response.status})`);
+
+  const data = await response.json();
+
+  const params = new URLSearchParams();
+  params.set("client_id", CLIENT_ID);
+  params.set("request_uri", data.requestUri);
+  params.set("origin", ORIGIN);
+
+  return {
+    transactionId: data.transactionId,
+    requestId: data.requestId,
+    deepLinkUrl: `openid4vp://authorize?${params.toString()}`,
+  };
+}
+
+export async function pollVPStatus(
+  requestId: string
+): Promise<"ACTIVE" | "VP_SUBMITTED" | "EXPIRED"> {
+  const response = await fetch(`${BASE_URL}/v1/verify/vp-request/${requestId}/status`);
+  if (!response.ok) throw new Error(`Erro ao buscar status: ${response.status}`);
+  const data = await response.json();
+  return data.status;
+}
+
+export async function getVPResult(
+  transactionId: string
+): Promise<{ verified: boolean; credentials: any[] }> {
+  const response = await fetch(`${BASE_URL}/v1/verify/vp-result/${transactionId}`);
+  if (!response.ok) throw new Error(`Erro ao buscar resultado: ${response.status}`);
+
+  const data = await response.json();
+
+  if (data.vpResultStatus !== "SUCCESS" || !data.vcResults?.length) {
+    throw new Error(`Resultado indisponível: status=${data.vpResultStatus}`);
+  }
+
+  const credentials = data.vcResults.map((r: any) => {
+    try {
+      return typeof r.vc === "string" ? JSON.parse(r.vc) : r.vc;
+    } catch {
+      return r.vc;
+    }
+  });
+
+  return { verified: true, credentials };
+}
+
+export async function openWalletForVerification(
+  singleCredentialId?: string
+): Promise<{ transactionId: string; requestId: string }> {
+  const { transactionId, requestId, deepLinkUrl } = await createVPRequest(singleCredentialId);
+
+  try {
+    await Linking.openURL(deepLinkUrl);
+  } catch {
+    throw new Error("Nenhum wallet compatível encontrado. Instale o INJI Wallet.");
+  }
+
+  return { transactionId, requestId };
+}
+```
+
+## Passo 2 — Tela de verificação
+
+O ponto crítico do fluxo mobile é detectar quando o usuário **volta ao app** após autorizar na carteira. Use `AppState` e `AsyncStorage` para isso:
 
 ```tsx
-// src/components/VerificaDocsCredito.tsx
-// O MESMO código da integração Web funciona no mobile!
-import { OpenID4VPVerification } from '@mosip/react-inji-verify-sdk';
+// src/screens/HomeScreen.tsx
+import { useState, useRef, useEffect } from "react";
+import { View, Text, Pressable, AppState } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { openWalletForVerification, pollVPStatus, getVPResult } from "../services/verifyService";
 
-export function VerificaDocsCredito() {
+const PENDING_POLL_KEY = "credme_pending_poll";
+
+type Status = "idle" | "loading" | "waiting" | "success" | "error";
+
+export default function HomeScreen() {
+  const [status, setStatus] = useState<Status>("idle");
+  const [errorMsg, setErrorMsg] = useState("");
+  const [credentials, setCredentials] = useState<any[]>([]);
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const startPolling = (transactionId: string, requestId: string) => {
+    if (pollRef.current) clearInterval(pollRef.current);
+    setStatus("waiting");
+
+    const checkStatus = async () => {
+      try {
+        const vpStatus = await pollVPStatus(requestId);
+        if (vpStatus === "VP_SUBMITTED") {
+          clearInterval(pollRef.current!);
+          pollRef.current = null;
+          await AsyncStorage.removeItem(PENDING_POLL_KEY);
+          const result = await getVPResult(transactionId);
+          setCredentials(result.credentials);
+          setStatus("success");
+        } else if (vpStatus === "EXPIRED") {
+          clearInterval(pollRef.current!);
+          pollRef.current = null;
+          await AsyncStorage.removeItem(PENDING_POLL_KEY);
+          setErrorMsg("Solicitação expirada. Tente novamente.");
+          setStatus("error");
+        }
+      } catch (e: any) {
+        console.warn("Poll error:", e?.message);
+      }
+    };
+
+    checkStatus();
+    pollRef.current = setInterval(checkStatus, 3000);
+  };
+
+  // Restaura polling pendente ao voltar ao foreground
+  useEffect(() => {
+    const restorePoll = () => {
+      AsyncStorage.getItem(PENDING_POLL_KEY).then((saved) => {
+        if (!saved) return;
+        try {
+          const { transactionId, requestId } = JSON.parse(saved);
+          if (transactionId && requestId && !pollRef.current)
+            startPolling(transactionId, requestId);
+        } catch {
+          AsyncStorage.removeItem(PENDING_POLL_KEY);
+        }
+      });
+    };
+
+    restorePoll();
+
+    const appStateSub = AppState.addEventListener("change", (state) => {
+      if (state === "active") restorePoll();
+    });
+
+    return () => {
+      appStateSub.remove();
+      if (pollRef.current) clearInterval(pollRef.current);
+    };
+  }, []);
+
+  const handleRequest = async (singleCredentialId?: string) => {
+    setStatus("loading");
+    setErrorMsg("");
+    setCredentials([]);
+
+    try {
+      const { transactionId, requestId } = await openWalletForVerification(singleCredentialId);
+      await AsyncStorage.setItem(PENDING_POLL_KEY, JSON.stringify({ transactionId, requestId }));
+      startPolling(transactionId, requestId);
+    } catch (e: any) {
+      setErrorMsg(e?.message || "Erro ao solicitar credenciais.");
+      setStatus("error");
+    }
+  };
+
+  const reset = () => {
+    if (pollRef.current) clearInterval(pollRef.current);
+    AsyncStorage.removeItem(PENDING_POLL_KEY);
+    setStatus("idle");
+    setCredentials([]);
+    setErrorMsg("");
+  };
+
   return (
-    <OpenID4VPVerification
-      verifyServiceUrl="<VERIFY_BASE_URL>/v1/verify"
-      clientId="did:web:<SEU_DOMINIO>:v1:verify"
-      protocol="openid4vp://"
-      presentationDefinition={presentationDefinition}
-      isSameDeviceFlowEnabled={true}  // padrão — Deep Link no mobile
-      onVpProcessed={(results) => {
-        const ok = results.some(r => r.vcStatus === 'SUCCESS');
-        console.log('Verificado:', ok);
-      }}
-      onError={(error) => console.error(error)}
-      onQrCodeExpired={() => console.log('Expirou')}
-    />
+    <View>
+      {status === "idle" && (
+        <Pressable onPress={() => handleRequest()}>
+          <Text>Verificar documentos e solicitar crédito</Text>
+        </Pressable>
+      )}
+      {status === "loading" && <Text>Conectando...</Text>}
+      {status === "waiting" && <Text>Aguardando autorização na carteira...</Text>}
+      {status === "success" && (
+        <View>
+          <Text>✅ {credentials.length} credencial(is) verificada(s)!</Text>
+          <Pressable onPress={reset}><Text>Nova solicitação</Text></Pressable>
+        </View>
+      )}
+      {status === "error" && (
+        <View>
+          <Text>⚠️ {errorMsg}</Text>
+          <Pressable onPress={reset}><Text>Tentar novamente</Text></Pressable>
+        </View>
+      )}
+    </View>
   );
 }
 ```
 
-::: {.callout-note}
-Não é necessário código diferente para mobile. O SDK detecta o dispositivo automaticamente e escolhe entre QR Code e Deep Link.
-:::
+## Verificação individual por credencial
 
-## O que acontece internamente no mobile
-
-1. SDK chama o INJI Verify Service para criar a VP Request
-2. SDK detecta que o dispositivo é mobile (via user agent)
-3. SDK redireciona o navegador para `openid4vp://authorize?...`
-4. A Carteira Digital abre e exibe a credencial para autorização
-5. Usuário autoriza o compartilhamento
-6. Carteira envia a VP ao INJI Verify Service
-7. Usuário volta ao navegador (ou ao app)
-8. SDK recupera a sessão do `sessionStorage` e busca o resultado
-
-## Botão personalizado para mobile
-
-Você pode usar `triggerElement` para criar um botão mais adequado ao mobile:
+Para verificar uma credencial por vez, passe o `id` do `input_descriptor`:
 
 ```tsx
-<OpenID4VPVerification
-  // ...
-  triggerElement={
-    <button className="btn-verificar-mobile">
-      Verificar com Carteira Digital
-    </button>
-  }
-/>
+// Verificar apenas o CCIR
+handleRequest("CCIRCredential");
+
+// Verificar apenas o Recibo CAR
+handleRequest("CARReceipt");
+
+// Verificar apenas o CAR Document
+handleRequest("CARDocument");
 ```
-
-## Desabilitar fluxo same-device
-
-Se quiser forçar QR Code mesmo no mobile (cenário raro):
-
-```tsx
-<OpenID4VPVerification
-  // ...
-  isSameDeviceFlowEnabled={false}  // Sempre QR Code
-/>
-```
-
-## Considerações Mobile
-
-### Retorno ao app
-
-Quando o usuário volta da Carteira Digital ao navegador, o SDK restaura a sessão a partir do `sessionStorage`. O resultado é obtido automaticamente.
-
-### Carteira não instalada
-
-Se a Carteira Digital não estiver instalada, o Deep Link não abrirá nada. Trate isso com uma mensagem orientando o usuário:
-
-```tsx
-<OpenID4VPVerification
-  // ...
-  onError={(error) => {
-    // Informar o usuário para instalar a Carteira Digital
-    alert('Instale a Carteira Digital para verificar seus documentos de Crédito Rural.');
-  }}
-/>
-```
-
-### Apps nativos (Flutter, React Native)
-
-O INJI Verify SDK é exclusivo para **React Web**. Para apps nativos, você tem duas opções:
-
-1. **WebView** — Abrir uma tela React com o SDK dentro de uma WebView
-2. **API direta** — Chamar os endpoints do INJI Verify Service diretamente e implementar a lógica de Deep Link no app nativo
-
-::: {.callout-warning}
-O SDK **não suporta** React Native, Angular, Vue ou SSR (Next.js). Para apps nativos, use a opção de WebView ou API direta.
-:::
 
 ## Próximo passo
 

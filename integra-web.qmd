@@ -4,121 +4,231 @@ title: "Integração Web (QR Code)"
 
 ## Objetivo
 
-Implementar uso de credenciais verificáveis em uma aplicação Web React usando QR Code (fluxo cross-device).
+Implementar verificação de credenciais rurais em uma aplicação Web React usando QR Code (fluxo cross-device).
 
 ## Fluxo Web
 
 ```{mermaid}
 sequenceDiagram
     participant U as Usuário (Desktop)
-    participant SDK as App React + SDK
+    participant App as App React
     participant VS as INJI Verify Service
     participant W as Carteira Digital (Celular)
 
-    U->>SDK: Clica "Verificar Documentos de Crédito Rural"
-    SDK->>VS: POST /v1/verify/vp-request
-    VS-->>SDK: requestId + authorizationUrl
-    SDK->>U: Renderiza QR Code
+    U->>App: Clica "Gerar QR Code"
+    App->>VS: POST /v1/verify/vp-request
+    VS-->>App: transactionId + requestId + requestUri
+    App->>U: Renderiza QR Code (openid4vp://authorize?...)
     U->>W: Escaneia QR Code
     W->>VS: POST /v1/verify/vp-submission (credencial)
-    VS->>VS: Valida credencial
-    Note over SDK,VS: Long-polling /vp-request/{id}/status
-    VS-->>SDK: Resultado
-    SDK->>U: Callback executado
+    VS->>VS: Valida CCIRCredential + CARReceipt + CARDocument
+    Note over App,VS: Polling até receber resultado
+    App->>VS: GET /v1/verify/vp-request/{requestId}/status
+    VS-->>App: { status: "VP_SUBMITTED" }
+    App->>VS: GET /v1/verify/vp-result/{transactionId}
+    VS-->>App: { vpResultStatus: "SUCCESS", vcResults: [...] }
+    App->>U: Exibe resultado
 ```
 
 ## Cenário
 
-O usuário está no **desktop**. O site exibe um QR Code. O usuário abre a Carteira Digital no **celular**, escaneia o QR Code e autoriza o compartilhamento da credencial.
+O usuário está no **desktop**. O site exibe um QR Code. O usuário abre a Carteira Digital no **celular**, escaneia o QR Code e autoriza o compartilhamento das credenciais rurais.
 
-## Passo 1 — Instalar o SDK
+## Passo 1 — Criar o serviço de verificação
 
-```bash
-npm install @mosip/react-inji-verify-sdk
+```ts
+// src/services/verifyService.ts
+const BASE_URL = '<VERIFY_BASE_URL>/v1/verify';
+const CLIENT_ID = 'did:web:<SEU_DOMINIO>:v1:verify';
+
+const PRESENTATION_DEFINITION = {
+  id: 'imovel-rural-check',
+  input_descriptors: [
+    {
+      id: 'CCIRCredential',
+      name: 'CCIR - Certificado de Cadastro',
+      purpose: 'Verificar cadastro do imóvel rural (CCIR)',
+      constraints: {
+        fields: [
+          {
+            path: ['$.type'],
+            filter: { type: 'string', pattern: 'CCIRCredential' },
+          },
+        ],
+      },
+    },
+    {
+      id: 'CARReceipt',
+      name: 'CAR - Recibo de Inscrição',
+      purpose: 'Verificar inscrição do imóvel no CAR',
+      constraints: {
+        fields: [
+          {
+            path: ['$.type'],
+            filter: { type: 'string', pattern: 'CARReceipt' },
+          },
+        ],
+      },
+    },
+    {
+      id: 'CARDocument',
+      name: 'CAR - Documento',
+      purpose: 'Verificar documento do imóvel no CAR',
+      constraints: {
+        fields: [
+          {
+            path: ['$.type'],
+            filter: { type: 'string', pattern: 'CARDocument' },
+          },
+        ],
+      },
+    },
+  ],
+};
+
+export async function createVPRequest() {
+  const response = await fetch(`${BASE_URL}/vp-request`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ clientId: CLIENT_ID, presentationDefinition: PRESENTATION_DEFINITION }),
+  });
+
+  if (!response.ok) throw new Error(`Failed to create VP request: ${response.status}`);
+
+  const data = await response.json();
+  const params = new URLSearchParams();
+  params.set('client_id', CLIENT_ID);
+  params.set('request_uri', data.requestUri);
+
+  return {
+    transactionId: data.transactionId,
+    requestId: data.requestId,
+    deepLinkUrl: `openid4vp://authorize?${params.toString()}`,
+  };
+}
+
+export async function pollVPStatus(requestId: string): Promise<'ACTIVE' | 'VP_SUBMITTED' | 'EXPIRED'> {
+  const response = await fetch(`${BASE_URL}/vp-request/${requestId}/status`);
+  if (!response.ok) throw new Error(`Failed to fetch VP status: ${response.status}`);
+  const data = await response.json();
+  return data.status;
+}
+
+export async function getVPResult(transactionId: string) {
+  const response = await fetch(`${BASE_URL}/vp-result/${transactionId}`);
+  if (!response.ok) throw new Error(`Failed to get VP result: ${response.status}`);
+
+  const data = await response.json();
+  if (data.vpResultStatus !== 'SUCCESS' || !data.vcResults?.length) {
+    throw new Error(`VP result unavailable: status=${data.vpResultStatus}`);
+  }
+
+  const credentials = data.vcResults.map((r: any) => {
+    try {
+      return typeof r.vc === 'string' ? JSON.parse(r.vc) : r.vc;
+    } catch {
+      return r.vc;
+    }
+  });
+
+  return { verified: true, credentials };
+}
 ```
 
-## Passo 2 — Componente de verificação
+## Passo 2 — Criar o hook de verificação
+
+```ts
+// src/hooks/useRuralVerification.ts
+import { useState, useCallback } from 'react';
+import { createVPRequest, pollVPStatus, getVPResult } from '../services/verifyService';
+
+export function useRuralVerification() {
+  const [waiting, setWaiting] = useState(false);
+  const [deepLinkUrl, setDeepLinkUrl] = useState<string | null>(null);
+
+  const verify = useCallback(async () => {
+    setWaiting(true);
+    setDeepLinkUrl(null);
+    try {
+      const { requestId, transactionId, deepLinkUrl } = await createVPRequest();
+      setDeepLinkUrl(deepLinkUrl);
+
+      // Polling até VP_SUBMITTED ou EXPIRED
+      while (true) {
+        const status = await pollVPStatus(requestId);
+        if (status === 'VP_SUBMITTED') {
+          const result = await getVPResult(transactionId);
+          setWaiting(false);
+          return result;
+        }
+        if (status === 'EXPIRED') {
+          setWaiting(false);
+          return null;
+        }
+        await new Promise((resolve) => setTimeout(resolve, 3000));
+      }
+    } catch (error) {
+      setWaiting(false);
+      throw error;
+    }
+  }, []);
+
+  return { verify, waiting, deepLinkUrl };
+}
+```
+
+## Passo 3 — Componente de verificação
 
 ```tsx
 // src/components/VerificaDocsCredito.tsx
 import { useState } from 'react';
-import { OpenID4VPVerification } from '@mosip/react-inji-verify-sdk';
+import QRCode from 'qrcode.react';
+import { useRuralVerification } from '../hooks/useRuralVerification';
 
-// Substitua pelo valor do seu ambiente
-const VERIFY_SERVICE_URL = '<VERIFY_BASE_URL>/v1/verify';
-const CLIENT_ID_DID = 'did:web:<SEU_DOMINIO>:v1:verify';
+export function VerificaDocsCredito() {
+  const { verify, waiting, deepLinkUrl } = useRuralVerification();
+  const [resultado, setResultado] = useState<{ sucesso: boolean; mensagem: string } | null>(null);
 
-// Substitua pela Presentation Definition do seu credenciamento
-const presentationDefinition = {
-  id: 'CCIR',
-  input_descriptors: [
-    {
-      id: 'ccir',
-      format: {
-        'vc+sd-jwt': {
-          'sd-jwt_alg_values': ['ES256']
-        }
-      },
-      constraints: {
-        fields: [
-          {
-            path: ['$.id'],
-            filter: {
-              type: 'string',
-              const: "<id>"
-            }
-          }
-        ]
+  const handleVerify = async () => {
+    setResultado(null);
+    try {
+      const result = await verify();
+      if (!result) {
+        setResultado({ sucesso: false, mensagem: 'Verificação expirada. Tente novamente.' });
+        return;
       }
+      setResultado({
+        sucesso: true,
+        mensagem: `${result.credentials.length} credencial(is) verificada(s) com sucesso.`,
+      });
+    } catch (error) {
+      setResultado({
+        sucesso: false,
+        mensagem: error instanceof Error ? error.message : 'Erro ao verificar documentos.',
+      });
     }
-  ]
-};
-
-type VerificaDocsCreditoProps = {
-  onVerificado: () => void;
-  onFalhou: () => void;
-};
-
-export function VerificaDocsCredito({ onVerificado, onFalhou }: VerificaDocsCreditoProps) {
-  const [estado, setEstado] = useState<'idle' | 'verificado' | 'falhou'>('idle');
+  };
 
   return (
     <div>
-      {estado === 'idle' && (
-        <OpenID4VPVerification
-          verifyServiceUrl={VERIFY_SERVICE_URL}
-          clientId={CLIENT_ID_DID}
-          protocol="openid4vp://"
-          presentationDefinition={presentationDefinition}
-          onVpProcessed={(results) => {
-            const ok = results.some(r => r.vcStatus === 'SUCCESS');
-            if (ok) {
-              setEstado('verificado');
-              onVerificado();
-            } else {
-              setEstado('falhou');
-              onFalhou();
-            }
-          }}
-          onError={(error) => {
-            console.error('Erro na verificação:', error);
-            setEstado('falhou');
-            onFalhou();
-          }}
-          onQrCodeExpired={() => {
-            console.log('QR Code expirou');
-          }}
-        />
+      <h2>Verificação de Documentos de Crédito Rural</h2>
+
+      {!waiting && !resultado && (
+        <button onClick={handleVerify}>Gerar QR Code</button>
       )}
 
-      {estado === 'verificado' && (
-        <p>Documentos verificados com sucesso.</p>
-      )}
-
-      {estado === 'falhou' && (
+      {waiting && deepLinkUrl && (
         <div>
-          <p>Verificação falhou.</p>
-          <button onClick={() => setEstado('idle')}>Tentar novamente</button>
+          <QRCode value={deepLinkUrl} size={256} />
+          <p>Escaneie com sua Carteira Digital (INJI Wallet)</p>
+          <p>Aguardando resposta...</p>
+        </div>
+      )}
+
+      {resultado && (
+        <div>
+          <p>{resultado.mensagem}</p>
+          <button onClick={() => setResultado(null)}>Voltar</button>
         </div>
       )}
     </div>
@@ -126,97 +236,38 @@ export function VerificaDocsCredito({ onVerificado, onFalhou }: VerificaDocsCred
 }
 ```
 
-## Passo 3 — Usar o componente
+## Passo 4 — Usar o componente
 
 ```tsx
-// src/pages/Checkout.tsx
+// src/pages/SolicitacaoCredito.tsx
 import { VerificaDocsCredito } from '../components/VerificaDocsCredito';
 
-export function Checkout() {
+export function SolicitacaoCredito() {
   return (
     <div>
-      <h1>Verificação de Documentos de Crédito Rural</h1>
-      <VerificaIdade
-        onVerificado={() => console.log('Acesso liberado')}
-        onFalhou={() => console.log('Acesso negado')}
-      />
+      <h1>Solicitação de Crédito Rural</h1>
+      <VerificaDocsCredito />
     </div>
   );
 }
 ```
 
-## Versão para produção (com `onVpReceived`)
+## Passo 5 — Testar ponta a ponta
 
-Em produção, use `onVpReceived` para buscar o resultado no backend:
+1. Acesse sua aplicação React no navegador
+2. Clique em **Gerar QR Code** para o QR Code aparece na tela
+3. Abra a **INJI Wallet** no celular
+4. Escaneie o QR Code
+5. Autorize o compartilhamento das credenciais na Wallet
+6. O componente exibe o resultado automaticamente
 
-```tsx
-// src/components/VerificaDocsCreditoProd.tsx
-import { OpenID4VPVerification } from '@mosip/react-inji-verify-sdk';
+## Variáveis de ambiente
 
-export function VerificaDocsCreditoProd() {
-  const handleVpReceived = async (txnId: string) => {
-    // Buscar resultado no seu backend
-    const res = await fetch(`/api/verificacao/resultado/${txnId}`);
-    const data = await res.json();
-
-    if (data.verified) {
-      // Liberar acesso
-    } else {
-      // Negar acesso
-    }
-  };
-
-  return (
-    <OpenID4VPVerification
-      verifyServiceUrl="<VERIFY_BASE_URL>/v1/verify"
-      clientId="did:web:<SEU_DOMINIO>:v1:verify"
-      protocol="openid4vp://"
-      presentationDefinition={presentationDefinition}
-      onVpReceived={handleVpReceived}
-      onError={(error) => console.error(error)}
-      onQrCodeExpired={() => console.log('QR expirou')}
-    />
-  );
-}
+```bash
+# .env
+VITE_VERIFY_SERVICE_URL=https://<SEU_DOMINIO>/v1/verify
+VITE_CLIENT_ID_DID=did:web:<SEU_DOMINIO>:v1:verify
 ```
-
-::: {.callout-important}
-Nessa abordagem, seu backend busca o resultado em `GET <VERIFY_BASE_URL>/v1/verify/vp-result/{txnId}` e decide se libera o acesso. Isso evita que o frontend seja adulterado.
-:::
-
-## Customização do QR Code
-
-```tsx
-<OpenID4VPVerification
-  // ...
-  qrCodeStyles={{
-    size: 300,
-    bgColor: '#ffffff',
-    fgColor: '#000000',
-  }}
-  triggerElement={<button className="btn-verificar">Verificar Documentos de Crédito Rural</button>}
-/>
-```
-
-## Props do `OpenID4VPVerification`
-
-| Prop | Tipo | Obrigatório | Descrição |
-|------|------|:-----------:|-----------|
-| `verifyServiceUrl` | `string` | Sim | URL do INJI Verify Service |
-| `clientId` | `string` | Sim | DID do verificador |
-| `protocol` | `string` | Sim | Protocolo (`"openid4vp://"`) |
-| `presentationDefinition` | `object` | Sim* | Presentation Definition inline |
-| `presentationDefinitionId` | `string` | Sim* | ID de definição pré-cadastrada |
-| `onVpReceived` | `(txnId) => void` | Sim** | Callback com transaction ID |
-| `onVpProcessed` | `(results) => void` | Sim** | Callback com resultado completo |
-| `onError` | `(error) => void` | Sim | Callback de erro |
-| `onQrCodeExpired` | `() => void` | Sim | Callback de QR expirado |
-| `triggerElement` | `ReactNode` | Não | Elemento que inicia a verificação |
-| `qrCodeStyles` | `object` | Não | Estilos do QR Code |
-
-\* Use `presentationDefinition` **ou** `presentationDefinitionId`, não ambos.
-
-\** Use `onVpReceived` **ou** `onVpProcessed`, não ambos.
 
 ## Próximo passo
 

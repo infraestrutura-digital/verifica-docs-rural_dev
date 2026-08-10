@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Integre rapidamente – VerificaDocsCreditoRural — Portal do Desenvolvedor</title>
+<title>Integre em 1 Hora – VerificaDocsCreditoRural — Portal do Desenvolvedor</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -77,7 +77,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-346afd1856ca820ea9bf8501d05cbecf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-55a229089d14938623797807ac366610.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -119,7 +119,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./arquitetura.html">Início Rápido</a></li><li class="breadcrumb-item"><a href="./quickstart.html">Integre rapidamente</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./arquitetura.html">Início Rápido</a></li><li class="breadcrumb-item"><a href="./quickstart.html">Integre em 1 Hora</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Alternar barra lateral" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Procurar" onclick="window.quartoOpenSearch();">
@@ -169,7 +169,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./quickstart.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Integre rapidamente</span></a>
+ <span class="menu-text">Integre em 1 Hora</span></a>
   </div>
 </li>
       </ul>
@@ -294,10 +294,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#etapa-1-preparar-vm-com-docker" id="toc-etapa-1-preparar-vm-com-docker" class="nav-link" data-scroll-target="#etapa-1-preparar-vm-com-docker">Etapa 1 — Preparar VM com Docker</a></li>
   <li><a href="#etapa-2-subir-inji-verify-service" id="toc-etapa-2-subir-inji-verify-service" class="nav-link" data-scroll-target="#etapa-2-subir-inji-verify-service">Etapa 2 — Subir INJI Verify Service</a></li>
   <li><a href="#etapa-3-expor-o-service-publicamente" id="toc-etapa-3-expor-o-service-publicamente" class="nav-link" data-scroll-target="#etapa-3-expor-o-service-publicamente">Etapa 3 — Expor o Service publicamente</a></li>
-  <li><a href="#etapa-4-instalar-o-sdk-no-projeto-react" id="toc-etapa-4-instalar-o-sdk-no-projeto-react" class="nav-link" data-scroll-target="#etapa-4-instalar-o-sdk-no-projeto-react">Etapa 4 — Instalar o SDK no projeto React</a></li>
-  <li><a href="#etapa-5-adicionar-componente-de-verificação" id="toc-etapa-5-adicionar-componente-de-verificação" class="nav-link" data-scroll-target="#etapa-5-adicionar-componente-de-verificação">Etapa 5 — Adicionar componente de verificação</a></li>
-  <li><a href="#etapa-6-testar-ponta-a-ponta" id="toc-etapa-6-testar-ponta-a-ponta" class="nav-link" data-scroll-target="#etapa-6-testar-ponta-a-ponta">Etapa 6 — Testar ponta a ponta</a></li>
-  <li><a href="#alternativa-receber-resultado-completo-no-frontend" id="toc-alternativa-receber-resultado-completo-no-frontend" class="nav-link" data-scroll-target="#alternativa-receber-resultado-completo-no-frontend">Alternativa: Receber resultado completo no frontend</a></li>
+  <li><a href="#etapa-4-adicionar-serviço-hook-e-componente" id="toc-etapa-4-adicionar-serviço-hook-e-componente" class="nav-link" data-scroll-target="#etapa-4-adicionar-serviço-hook-e-componente">Etapa 4 — Adicionar serviço, hook e componente</a></li>
+  <li><a href="#etapa-5-testar-ponta-a-ponta" id="toc-etapa-5-testar-ponta-a-ponta" class="nav-link" data-scroll-target="#etapa-5-testar-ponta-a-ponta">Etapa 5 — Testar ponta a ponta</a></li>
   <li><a href="#próximo-passo" id="toc-próximo-passo" class="nav-link" data-scroll-target="#próximo-passo">Próximo passo</a></li>
   </ul>
 </nav>
@@ -305,9 +303,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./arquitetura.html">Início Rápido</a></li><li class="breadcrumb-item"><a href="./quickstart.html">Integre rapidamente</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./arquitetura.html">Início Rápido</a></li><li class="breadcrumb-item"><a href="./quickstart.html">Integre em 1 Hora</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Integre rapidamente</h1>
+<h1 class="title">Integre em 1 Hora</h1>
 </div>
 
 
@@ -326,7 +324,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <section id="objetivo" class="level2">
 <h2 class="anchored" data-anchor-id="objetivo">Objetivo</h2>
-<p>Sair do zero até uma credencial verificável funcionando em ambiente de desenvolvimento.</p>
+<p>Sair do zero até uma verificação de credenciais rurais funcionando em ambiente de desenvolvimento.</p>
 </section>
 <section id="checklist" class="level2">
 <h2 class="anchored" data-anchor-id="checklist">Checklist</h2>
@@ -341,7 +339,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <tr class="header">
 <th>#</th>
 <th>Etapa</th>
-<th>Tempos típicos</th>
+<th>Tempo</th>
 <th>Resultado esperado</th>
 </tr>
 </thead>
@@ -366,21 +364,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tr>
 <tr class="even">
 <td>4</td>
-<td>Instalar o SDK no projeto React</td>
-<td>5 min</td>
-<td><code>@mosip/react-inji-verify-sdk</code> instalado</td>
-</tr>
-<tr class="odd">
-<td>5</td>
-<td>Adicionar componente de verificação</td>
+<td>Adicionar serviço, hook e componente</td>
 <td>15 min</td>
 <td>QR Code exibido na tela</td>
 </tr>
-<tr class="even">
-<td>6</td>
+<tr class="odd">
+<td>5</td>
 <td>Testar ponta a ponta</td>
 <td>15 min</td>
-<td>Credencial verificada com sucesso</td>
+<td>Credenciais verificadas com sucesso</td>
 </tr>
 </tbody>
 </table>
@@ -399,17 +391,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Veja a configuração completa em <a href="./inji-verify.html">Subindo o INJI Verify Service</a>.</p>
 <p><strong>Resultado:</strong></p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-s</span> http://localhost:8080/v1/verify/actuator/health</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># { "status": "UP" }</span></span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># {"status":"UP"}</span></span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="etapa-3-expor-o-service-publicamente" class="level2">
 <h2 class="anchored" data-anchor-id="etapa-3-expor-o-service-publicamente">Etapa 3 — Expor o Service publicamente</h2>
-<p>A Carteira Digital (no celular do cidadão) precisa acessar o INJI Verify Service. Em desenvolvimento, use ngrok:</p>
+<p>A Carteira Digital (no celular do cidadão) precisa acessar o INJI Verify Service. Em desenvolvimento, use ngrok para obter uma URL pública:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">ngrok</span> http 8080</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 <p>Anote a URL pública (ex: <code>https://abc123.ngrok-free.app</code>). Atualize as variáveis de ambiente do Service:</p>
 <ul>
-<li><code>INJI_VP_SUBMISSION_BASE_URL=https://abc123.ngrok-free.app/v1/verify</code></li>
-<li><code>INJI_DID_VERIFY_URI=did:web:abc123.ngrok-free.app:v1:verify</code></li>
-<li><code>INJI_DID_VERIFY_PUBLIC_KEY_URI=did:web:abc123.ngrok-free.app:v1:verify#key-0</code></li>
+<li><code>INJI_VP_SUBMISSION_BASE_URL</code>: <code>https://abc123.ngrok-free.app/v1/verify</code></li>
+<li><code>INJI_DID_VERIFY_URI</code>: <code>did:web:abc123.ngrok-free.app:v1:verify</code></li>
+<li><code>INJI_DID_VERIFY_PUBLIC_KEY_URI</code>: <code>did:web:abc123.ngrok-free.app:v1:verify#key-0</code></li>
 </ul>
 <p>Reinicie o Service:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> compose down <span class="kw">&amp;&amp;</span> <span class="ex">docker</span> compose up <span class="at">-d</span></span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
@@ -426,138 +418,57 @@ Aviso
 <p>Em produção, use um domínio real com HTTPS. Veja <a href="./producao.html">Produção e Operação</a>.</p>
 </div>
 </div>
-<p><strong>Resultado:</strong> URL pública acessível pelo celular.</p>
+<p><strong>Resultado:</strong> Carteira Digital alcança o Service.</p>
 </section>
-<section id="etapa-4-instalar-o-sdk-no-projeto-react" class="level2">
-<h2 class="anchored" data-anchor-id="etapa-4-instalar-o-sdk-no-projeto-react">Etapa 4 — Instalar o SDK no projeto React</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">npm</span> install @mosip/react-inji-verify-sdk</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Nota
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>O SDK requer <strong>React 18.2.0+</strong> e <strong>TypeScript 4.9.5+</strong> como peer dependencies.</p>
-</div>
-</div>
-<p><strong>Resultado:</strong> Pacote instalado sem erros.</p>
-</section>
-<section id="etapa-5-adicionar-componente-de-verificação" class="level2">
-<h2 class="anchored" data-anchor-id="etapa-5-adicionar-componente-de-verificação">Etapa 5 — Adicionar componente de verificação</h2>
-<pre class="tsx"><code>// src/components/VerificaDocsCredito.tsx
-import { OpenID4VPVerification } from '@mosip/react-inji-verify-sdk';
-
-// Substitua pela URL do seu INJI Verify Service
-const VERIFY_SERVICE_URL = 'https://abc123.ngrok-free.app/v1/verify';
-
-// Substitua pelo DID do seu verificador
-const CLIENT_ID_DID = 'did:web:abc123.ngrok-free.app:v1:verify';
-
-// Presentation Definition para credencial verificável
-// Substitua pela definição fornecida no seu credenciamento
-const presentationDefinition = {
-  id: 'CCIR',
-  input_descriptors: [
-    {
-      id: 'ccir',
-      format: {
-        'vc+sd-jwt': {
-          'sd-jwt_alg_values': ['ES256']
-        }
-      },
-      constraints: {
-        fields: [
-          {
-            path: ['$.id'],
-            filter: {
-              type: 'string',
-              const: "&lt;id&gt;"
-            }
-          }
-        ]
-      }
-    }
-  ]
-};
+<section id="etapa-4-adicionar-serviço-hook-e-componente" class="level2">
+<h2 class="anchored" data-anchor-id="etapa-4-adicionar-serviço-hook-e-componente">Etapa 4 — Adicionar serviço, hook e componente</h2>
+<p>Crie os três arquivos abaixo. Para o código completo e detalhado, veja <a href="./integra-web.html">Integração Web (QR Code)</a>.</p>
+<p><strong><code>src/services/verifyService.ts</code></strong> — chamadas REST ao backend:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode ts code-with-copy"><code class="sourceCode typescript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> BASE_URL <span class="op">=</span> <span class="st">'https://abc123.ngrok-free.app/v1/verify'</span><span class="op">;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> CLIENT_ID <span class="op">=</span> <span class="st">'did:web:abc123.ngrok-free.app:v1:verify'</span><span class="op">;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> PRESENTATION_DEFINITION <span class="op">=</span> {</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  id<span class="op">:</span> <span class="st">'imovel-rural-check'</span><span class="op">,</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  input_descriptors<span class="op">:</span> [</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    { id<span class="op">:</span> <span class="st">'CCIRCredential'</span><span class="op">,</span> <span class="co">/* ... */</span> }<span class="op">,</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    { id<span class="op">:</span> <span class="st">'CARReceipt'</span><span class="op">,</span> <span class="co">/* ... */</span> }<span class="op">,</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    { id<span class="op">:</span> <span class="st">'CARDocument'</span><span class="op">,</span> <span class="co">/* ... */</span> }<span class="op">,</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  ]<span class="op">,</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">async</span> <span class="kw">function</span> <span class="fu">createVPRequest</span>() { <span class="co">/* POST /vp-request */</span> }</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">async</span> <span class="kw">function</span> <span class="fu">pollVPStatus</span>(requestId<span class="op">:</span> <span class="dt">string</span>) { <span class="co">/* GET /vp-request/{id}/status */</span> }</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">async</span> <span class="kw">function</span> <span class="fu">getVPResult</span>(transactionId<span class="op">:</span> <span class="dt">string</span>) { <span class="co">/* GET /vp-result/{id} */</span> }</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong><code>src/hooks/useRuralVerification.ts</code></strong> — gerencia estado e orquestra o fluxo:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode ts code-with-copy"><code class="sourceCode typescript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">function</span> <span class="fu">useRuralVerification</span>() {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">// createVPRequest → polling /status → getVPResult</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> { verify<span class="op">,</span> waiting<span class="op">,</span> deepLinkUrl }<span class="op">;</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
+<p><strong><code>src/components/VerificaDocsCredito.tsx</code></strong> — exibe QR Code e resultado:</p>
+<pre class="tsx"><code>import QRCode from 'qrcode.react';
+import { useRuralVerification } from '../hooks/useRuralVerification';
 
 export function VerificaDocsCredito() {
-  const handleVerificado = (txnId: string) =&gt; {
-    console.log('Verificação concluída. Transaction ID:', txnId);
-    // Busque o resultado no seu backend se necessário
-    // ou use onVpProcessed para receber o resultado direto
-  };
-
-  const handleErro = (error: unknown) =&gt; {
-    console.error('Erro na verificação:', error);
-  };
-
-  const handleQrExpirado = () =&gt; {
-    console.log('QR Code expirou');
-  };
-
+  const { verify, waiting, deepLinkUrl } = useRuralVerification();
   return (
     &lt;div&gt;
-      &lt;h2&gt;Credencial Verificável&lt;/h2&gt;
-      &lt;OpenID4VPVerification
-        verifyServiceUrl={VERIFY_SERVICE_URL}
-        clientId={CLIENT_ID_DID}
-        protocol="openid4vp://"
-        presentationDefinition={presentationDefinition}
-        onVpReceived={handleVerificado}
-        onError={handleErro}
-        onQrCodeExpired={handleQrExpirado}
-      /&gt;
+      &lt;button onClick={verify}&gt;Gerar QR Code&lt;/button&gt;
+      {waiting &amp;&amp; deepLinkUrl &amp;&amp; &lt;QRCode value={deepLinkUrl} size={256} /&gt;}
     &lt;/div&gt;
   );
 }</code></pre>
-<p><strong>Resultado:</strong> Componente renderiza QR Code na tela.</p>
+<p><strong>Resultado:</strong> Componente renderiza QR Code na tela ao clicar no botão.</p>
 </section>
-<section id="etapa-6-testar-ponta-a-ponta" class="level2">
-<h2 class="anchored" data-anchor-id="etapa-6-testar-ponta-a-ponta">Etapa 6 — Testar ponta a ponta</h2>
+<section id="etapa-5-testar-ponta-a-ponta" class="level2">
+<h2 class="anchored" data-anchor-id="etapa-5-testar-ponta-a-ponta">Etapa 5 — Testar ponta a ponta</h2>
 <ol type="1">
 <li>Acesse sua aplicação React no navegador</li>
-<li>O QR Code aparece na tela</li>
+<li>Clique em <strong>Gerar QR Code</strong> para o QR Code aparecer na tela</li>
 <li>Abra a <strong>INJI Wallet</strong> no celular</li>
 <li>Escaneie o QR Code</li>
-<li>Autorize o compartilhamento da credencial na Wallet</li>
-<li>O SDK recebe o resultado via callback</li>
+<li>Autorize o compartilhamento das credenciais na Wallet</li>
+<li>O componente exibe o resultado automaticamente</li>
 </ol>
-<p><strong>Resultado esperado (no console):</strong></p>
-<pre><code>Verificação concluída. Transaction ID: abc-123-def-456</code></pre>
-</section>
-<section id="alternativa-receber-resultado-completo-no-frontend" class="level2">
-<h2 class="anchored" data-anchor-id="alternativa-receber-resultado-completo-no-frontend">Alternativa: Receber resultado completo no frontend</h2>
-<p>Se preferir receber o resultado diretamente (sem buscar no backend), use <code>onVpProcessed</code> em vez de <code>onVpReceived</code>:</p>
-<pre class="tsx"><code>&lt;OpenID4VPVerification
-  verifyServiceUrl={VERIFY_SERVICE_URL}
-  clientId={CLIENT_ID_DID}
-  protocol="openid4vp://"
-  presentationDefinition={presentationDefinition}
-  onVpProcessed={(results) =&gt; {
-    // results: Array&lt;{ vc: unknown, vcStatus: "SUCCESS" | "INVALID" | "EXPIRED" }&gt;
-    const verificado = results.some(r =&gt; r.vcStatus === 'SUCCESS');
-    console.log('CCIR verificado:', verificado);
-  }}
-  onError={(error) =&gt; console.error(error)}
-  onQrCodeExpired={() =&gt; console.log('QR expirou')}
-/&gt;</code></pre>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Aviso
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>A documentação do INJI recomenda usar <code>onVpReceived</code> em produção e buscar o resultado pelo <code>txnId</code> no backend para maior segurança. O <code>onVpProcessed</code> é adequado para desenvolvimento e testes.</p>
-</div>
-</div>
 </section>
 <section id="próximo-passo" class="level2">
 <h2 class="anchored" data-anchor-id="próximo-passo">Próximo passo</h2>
