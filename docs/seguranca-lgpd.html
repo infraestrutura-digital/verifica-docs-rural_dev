@@ -77,7 +77,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-346afd1856ca820ea9bf8501d05cbecf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-55a229089d14938623797807ac366610.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -169,7 +169,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./quickstart.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Integre rapidamente</span></a>
+ <span class="menu-text">Integre em 1 Hora</span></a>
   </div>
 </li>
       </ul>
@@ -297,9 +297,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#aplicação-react" id="toc-aplicação-react" class="nav-link" data-scroll-target="#aplicação-react">Aplicação React</a></li>
   <li><a href="#infraestrutura" id="toc-infraestrutura" class="nav-link" data-scroll-target="#infraestrutura">Infraestrutura</a></li>
   </ul></li>
-  <li><a href="#onvpreceived-vs-onvpprocessed-segurança" id="toc-onvpreceived-vs-onvpprocessed-segurança" class="nav-link" data-scroll-target="#onvpreceived-vs-onvpprocessed-segurança"><code>onVpReceived</code> vs <code>onVpProcessed</code> — Segurança</a></li>
+  <li><a href="#leitura-do-resultado-segurança" id="toc-leitura-do-resultado-segurança" class="nav-link" data-scroll-target="#leitura-do-resultado-segurança">Leitura do resultado — Segurança</a></li>
   <li><a href="#did-e-keystore" id="toc-did-e-keystore" class="nav-link" data-scroll-target="#did-e-keystore">DID e Keystore</a></li>
-  <li><a href="#claims-filtradas-como-metadados" id="toc-claims-filtradas-como-metadados" class="nav-link" data-scroll-target="#claims-filtradas-como-metadados">Claims filtradas como metadados</a></li>
   <li><a href="#consentimento-do-usuário" id="toc-consentimento-do-usuário" class="nav-link" data-scroll-target="#consentimento-do-usuário">Consentimento do Usuário</a></li>
   <li><a href="#próximo-passo" id="toc-próximo-passo" class="nav-link" data-scroll-target="#próximo-passo">Próximo passo</a></li>
   </ul>
@@ -379,7 +378,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="aplicação-react" class="level3">
 <h3 class="anchored" data-anchor-id="aplicação-react">Aplicação React</h3>
 <ul class="task-list">
-<li><label><input type="checkbox"><code>onVpReceived</code> (com validação no backend) em vez de <code>onVpProcessed</code> em produção</label></li>
 <li><label><input type="checkbox">Sem dados de credencial armazenados no frontend (localStorage, sessionStorage, etc.)</label></li>
 <li><label><input type="checkbox">CSP (Content Security Policy) configurado</label></li>
 </ul>
@@ -394,71 +392,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 </section>
 </section>
-<section id="onvpreceived-vs-onvpprocessed-segurança" class="level2">
-<h2 class="anchored" data-anchor-id="onvpreceived-vs-onvpprocessed-segurança"><code>onVpReceived</code> vs <code>onVpProcessed</code> — Segurança</h2>
-<table class="caption-top table">
-<thead>
-<tr class="header">
-<th>Aspecto</th>
-<th><code>onVpReceived</code></th>
-<th><code>onVpProcessed</code></th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Resultado chega ao</td>
-<td>Backend (via txnId)</td>
-<td>Frontend (direto)</td>
-</tr>
-<tr class="even">
-<td>Adulteração possível?</td>
-<td>Não (backend valida)</td>
-<td>Sim (DevTools)</td>
-</tr>
-<tr class="odd">
-<td>Uso recomendado</td>
-<td><strong>Produção</strong></td>
-<td>Desenvolvimento</td>
-</tr>
-</tbody>
-</table>
-<p>Em produção, o fluxo seguro é:</p>
-<ol type="1">
-<li>SDK recebe <code>txnId</code> via <code>onVpReceived</code></li>
-<li>Frontend envia <code>txnId</code> ao seu backend</li>
-<li>Seu backend chama <code>GET &lt;VERIFY_BASE_URL&gt;/v1/verify/vp-result/{txnId}</code></li>
-<li>Backend decide se libera o acesso</li>
-</ol>
-<pre class="tsx"><code>// Frontend
-onVpReceived={async (txnId) =&gt; {
-  const res = await fetch(`/api/verificacao/${txnId}`);
-  const data = await res.json();
-  if (data.verified) { /* liberar */ }
-}}</code></pre>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode javascript code-with-copy"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">// Backend (Node/Express) — opcional mas recomendado para produção</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">get</span>(<span class="st">'/api/verificacao/:txnId'</span><span class="op">,</span> <span class="kw">async</span> (req<span class="op">,</span> res) <span class="kw">=&gt;</span> {</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> { txnId } <span class="op">=</span> req<span class="op">.</span><span class="at">params</span><span class="op">;</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Substitua pelo valor do seu ambiente</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> result <span class="op">=</span> <span class="cf">await</span> <span class="fu">fetch</span>(</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="vs">`&lt;VERIFY_BASE_URL&gt;/v1/verify/vp-result/</span><span class="sc">${</span>txnId<span class="sc">}</span><span class="vs">`</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  )<span class="op">;</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> data <span class="op">=</span> <span class="cf">await</span> result<span class="op">.</span><span class="fu">json</span>()<span class="op">;</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> verified <span class="op">=</span> data<span class="op">.</span><span class="fu">some</span>(r <span class="kw">=&gt;</span> r<span class="op">.</span><span class="at">vcStatus</span> <span class="op">===</span> <span class="st">'SUCCESS'</span>)<span class="op">;</span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  res<span class="op">.</span><span class="fu">json</span>({ verified })<span class="op">;</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="callout callout-style-default callout-important callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Importante
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>O backend acima é <strong>simples e opcional</strong> — serve apenas para isolar a decisão de acesso do frontend. Não é um orquestrador de todo o fluxo.</p>
-</div>
-</div>
+<section id="leitura-do-resultado-segurança" class="level2">
+<h2 class="anchored" data-anchor-id="leitura-do-resultado-segurança">Leitura do resultado — Segurança</h2>
+<p>Após o wallet submeter a VP, o resultado é lido diretamente via <code>GET /v1/verify/vp-result/{transactionId}</code>. Cada item em <code>vcResults</code> corresponde a uma credencial (<code>CCIRCredential</code>, <code>CARReceipt</code>, <code>CARDocument</code>):</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode ts code-with-copy"><code class="sourceCode typescript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">// verifyService.ts</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (data<span class="op">.</span><span class="at">vpResultStatus</span> <span class="op">!==</span> <span class="st">'SUCCESS'</span> <span class="op">||</span> <span class="op">!</span>data<span class="op">.</span><span class="at">vcResults</span><span class="op">?.</span><span class="at">length</span>) {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">throw</span> <span class="kw">new</span> <span class="bu">Error</span>(<span class="vs">`VP result unavailable: status=</span><span class="sc">${</span>data<span class="op">.</span><span class="at">vpResultStatus</span><span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> credentials <span class="op">=</span> data<span class="op">.</span><span class="at">vcResults</span><span class="op">.</span><span class="fu">map</span>((r<span class="op">:</span> <span class="dt">any</span>) <span class="kw">=&gt;</span> {</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">try</span> {</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="kw">typeof</span> r<span class="op">.</span><span class="at">vc</span> <span class="op">===</span> <span class="st">'string'</span> <span class="op">?</span> <span class="bu">JSON</span><span class="op">.</span><span class="fu">parse</span>(r<span class="op">.</span><span class="at">vc</span>) <span class="op">:</span> r<span class="op">.</span><span class="at">vc</span><span class="op">;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">catch</span> {</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> r<span class="op">.</span><span class="at">vc</span><span class="op">;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">// credentials[0] → CCIRCredential</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">// credentials[1] → CARReceipt</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">// credentials[2] → CARDocument</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="cf">return</span> { verified<span class="op">:</span> <span class="kw">true</span><span class="op">,</span> credentials }<span class="op">;</span></span></code></pre></div><button title="Copiar para a área de transferência" class="code-copy-button"><i class="bi"></i></button></div>
 </section>
 <section id="did-e-keystore" class="level2">
 <h2 class="anchored" data-anchor-id="did-e-keystore">DID e Keystore</h2>
@@ -481,12 +433,6 @@ Aviso
 <p>O <code>test.p12</code> incluído no INJI é para <strong>desenvolvimento apenas</strong>. Gere um keystore próprio para produção.</p>
 </div>
 </div>
-</section>
-<section id="claims-filtradas-como-metadados" class="level2">
-<h2 class="anchored" data-anchor-id="claims-filtradas-como-metadados">Claims filtradas como metadados</h2>
-<p>A variável <code>INJI_VERIFY_CLAIMS_WITH_META_DATA</code> define campos tratados como metadados internos (não exibidos):</p>
-<pre><code>_sd, _sd_alg, iss, cnf, sub, aud, exp, nbf, iat, cti</code></pre>
-<p>Esses campos são estruturais do SD-JWT e não contêm dados pessoais.</p>
 </section>
 <section id="consentimento-do-usuário" class="level2">
 <h2 class="anchored" data-anchor-id="consentimento-do-usuário">Consentimento do Usuário</h2>

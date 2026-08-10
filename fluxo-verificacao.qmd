@@ -4,27 +4,28 @@ title: "Fluxo de Verificação (Visão Geral)"
 
 ## Objetivo
 
-Entender o ciclo completo de uso de uma credencial verificável, do início ao resultado.
+Entender o ciclo completo de verificação de credenciais rurais, do início ao resultado.
 
 ## Fluxo Ponta a Ponta (Cross-Device — QR Code)
 
 ```{mermaid}
 sequenceDiagram
     participant U as Usuário (Desktop)
-    participant SDK as App React + SDK
+    participant A as App React Native
     participant VS as INJI Verify Service
     participant W as Carteira Digital (Celular)
 
-    U->>SDK: Clica "Verificar Documentos de Crédito Rural"
-    SDK->>VS: POST /v1/verify/vp-request
-    VS-->>SDK: requestId + authorizationUrl
-    SDK->>U: Exibe QR Code (authorizationUrl)
+    U->>A: Toca "Verificar documentos e solicitar crédito"
+    A->>VS: POST /v1/verify/vp-request
+    VS-->>A: transactionId + requestId + requestUri
+    A->>U: Exibe QR Code (openid4vp://authorize?client_id=...&request_uri=...)
     U->>W: Escaneia QR Code com a Carteira
     W->>VS: Apresenta credencial (VP submission)
     VS->>VS: Valida credencial + CCIR + CAF + Recibo CAR + Demonstrativo CAR
-    Note over SDK,VS: SDK faz long-polling em /vp-request/{id}/status
-    VS-->>SDK: Resultado da verificação
-    SDK->>U: "Documentos verificados!" (callback)
+    Note over A,VS: App faz polling em /vp-request/{requestId}/status
+    VS-->>A: status VP_SUBMITTED
+    A->>VS: GET /v1/verify/vp-result/{transactionId}
+    VS-->>A: vpResultStatus + vcResults
 ```
 
 ## Fluxo Same-Device (Deep Link — Mobile)
@@ -32,79 +33,48 @@ sequenceDiagram
 ```{mermaid}
 sequenceDiagram
     participant U as Usuário (Celular)
-    participant SDK as App React + SDK
+    participant A as App React Native
     participant VS as INJI Verify Service
     participant W as Carteira Digital
 
-    U->>SDK: Toca "Verificar Documentos de Crédito Rural"
-    SDK->>VS: POST /v1/verify/vp-request
-    VS-->>SDK: requestId + authorizationUrl
-    SDK->>W: Abre Deep Link (openid4vp://...)
-    W->>VS: Apresenta credencial (VP submission)
+    U->>A: Toca "Verificar documentos e solicitar crédito"
+    A->>VS: POST /v1/verify/vp-request
+    VS-->>A: transactionId + requestId + requestUri
+    A->>W: Abre Deep Link (openid4vp://authorize?client_id=...&request_uri=...)
+    W->>VS: Apresenta credencial (VP submission via direct_post)
     Note over W: Usuário volta ao app
-    SDK->>VS: Long-polling /vp-request/{id}/status
-    VS-->>SDK: Resultado da verificação
+    A->>VS: Polling /vp-request/{id}/status
+    VS-->>A: status VP_SUBMITTED
+    A->>VS: GET /v1/verify/vp-result/{transactionId}
     SDK->>U: "Documentos verificados!" (callback)
 ```
 
-## O que o SDK faz internamente
+## O que a aplicação faz internamente
 
-O INJI Verify SDK gerencia todo o ciclo:
-
-1. **Cria a VP Request** — chama `POST /v1/verify/vp-request` com a Presentation Definition
-2. **Detecta o dispositivo** — se mobile, usa Deep Link; se desktop, renderiza QR Code
-3. **Long-polling** — consulta `GET /v1/verify/vp-request/{id}/status` repetidamente (timeout padrão: 55s)
-4. **Busca resultado** — quando a Wallet envia a credencial, obtém o resultado via `GET /v1/verify/vp-result/{id}`
-5. **Dispara callback** — chama `onVpReceived(txnId)` ou `onVpProcessed(results)`
-
-Você **não precisa implementar** nenhuma dessas etapas manualmente.
+1. **Cria a VP Request** — `POST /v1/verify/vp-request` com a `PRESENTATION_DEFINITION` (CCIRCredential, CARReceipt, CARDocument)
+2. **Monta o Deep Link** — `openid4vp://authorize?client_id=...` usando os dados retornados ou o `requestUri`
+3. **Abre a Carteira** — `Linking.openURL(deepLinkUrl)` para fluxo same-device, ou exibe QR Code para cross-device
+4. **Polling** — consulta `GET /v1/verify/vp-request/{requestId}/status` a cada 3s até receber `VP_SUBMITTED` ou `EXPIRED`
+5. **Busca resultado** — `GET /v1/verify/vp-result/{transactionId}`, mapeia `vcResults` para as credenciais verificadas
 
 ## Estados da Verificação
 
 | Estado | Significado |
 |--------|-------------|
-| VP Request criada | Aguardando apresentação da credencial |
-| VP submetida | Carteira enviou a credencial ao Service |
+| `ACTIVE` | VP Request criada, aguardando apresentação da credencial |
+| `VP_SUBMITTED` | Carteira enviou a credencial ao Service |
+| `EXPIRED` | Sessão expirada sem apresentação |
 | `SUCCESS` | Credencial válida e policy satisfeita |
 | `INVALID` | Credencial inválida (assinatura, emissor, formato) |
-| `EXPIRED` | Credencial ou sessão expirada |
 
-## Callbacks do SDK
+## Funções principais do `verifyService.ts`
 
-O SDK oferece **dois modos** de receber o resultado (mutuamente exclusivos):
-
-### `onVpReceived(txnId)` — Recomendado para produção
-
-Retorna apenas o `txnId`. Você busca o resultado no seu backend ou diretamente no INJI Verify Service.
-
-```tsx
-<OpenID4VPVerification
-  // ...
-  onVpReceived={(txnId) => {
-    // Buscar resultado no Service: GET /v1/verify/vp-result/{txnId}
-    console.log('Transaction ID:', txnId);
-  }}
-/>
-```
-
-### `onVpProcessed(results)` — Para desenvolvimento
-
-Retorna o resultado completo diretamente no frontend.
-
-```tsx
-<OpenID4VPVerification
-  // ...
-  onVpProcessed={(results) => {
-    // results: Array<{ vc: unknown, vcStatus: "SUCCESS" | "INVALID" | "EXPIRED" }>
-    const ok = results.some(r => r.vcStatus === 'SUCCESS');
-    console.log('Verificado:', ok);
-  }}
-/>
-```
-
-::: {.callout-warning}
-`onVpProcessed` expõe o resultado diretamente no frontend. Em produção, use `onVpReceived` e valide o resultado no backend para evitar adulteração.
-:::
+| Função | Descrição |
+|--------|-----------|
+| `createVPRequest()` | `POST /vp-request` — retorna `transactionId`, `requestId`, `deepLinkUrl` |
+| `pollVPStatus(requestId)` | `GET /vp-request/{id}/status` — retorna `ACTIVE`, `VP_SUBMITTED` ou `EXPIRED` |
+| `getVPResult(transactionId)` | `GET /vp-result/{id}` — retorna `{ verified, credentials }` |
+| `openWalletForVerification()` | Combina `createVPRequest` + `Linking.openURL` |
 
 ## Próximo passo
 

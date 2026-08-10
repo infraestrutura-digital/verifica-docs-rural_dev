@@ -15,17 +15,18 @@ flowchart LR
     end
 
     subgraph verificador["🔍 Verificador — você"]
-        B["🌐 App React<br>+ INJI Verify SDK"]
-        C["⚙️ INJI Verify Service<br>Spring Boot · PostgreSQL<br>Docker · VM"]
+        B["📱 App Mobile<br>(React Native + Expo)"]
+        C["⚙️ INJI Verify Service<br>Spring Boot · PostgreSQL 15<br>Docker · VM"]
     end
 
     subgraph governo["🏛️ Governo"]
         E["🏢 Emissor de<br>Credenciais"]
     end
 
-    B <-->|"REST API<br>(verifyServiceUrl)"| C
-    C <-->|"OpenID4VP<br>(VP submission)"| A
-    B -.->|"QR Code / Deep Link<br>(authorizationUrl)"| A
+    B -->|"POST /vp-request<br>(REST API)"| C
+    C -->|"polling /status<br>+ /vp-result"| B
+    C <-->|"OpenID4VP<br>(direct_post)"| A
+    B -.->|"Deep Link<br>(openid4vp://authorize)"| A
     E <-.->|"OpenID4VCI"| A
 
     classDef estiloCidadao fill:#ffffff,stroke:#2563eb,color:#1e3a8a
@@ -45,25 +46,25 @@ flowchart LR
 
 | Componente | Responsável | Tecnologia | Descrição |
 |-----------|-------------|------------|-----------|
-| **Carteira Digital** | Cidadão | INJI Wallet (app mobile) | Armazena a credencial de idade emitida pelo governo |
-| **App React + SDK** | Verificador (você) | React 18 + `@mosip/react-inji-verify-sdk` | Componentes React que gerenciam o fluxo de verificação |
-| **INJI Verify Service** | Verificador (você) | Java 21, Spring Boot 3.2, PostgreSQL 13 | Backend que valida criptograficamente a credencial via OpenID4VP |
-| **Emissor** | Governo | — | Emitiu a credencial. Não participa do fluxo em tempo real |
+| **Carteira Digital** | Cidadão | INJI Wallet (app mobile) | Armazena as credenciais rurais (CCIR, CAR) emitidas pelo governo |
+| **App Mobile** | Verificador (você) | React Native + Expo | App que orquestra o fluxo: cria VP Request, abre a carteira via Deep Link e faz polling do resultado |
+| **INJI Verify Service** | Verificador (você) | Java 21, Spring Boot 3.2, PostgreSQL 15 | Backend que valida criptograficamente as credenciais via OpenID4VP |
+| **Emissor** | Governo | — | Emitiu as credenciais. Não participa do fluxo em tempo real |
 
 ## Como os componentes se comunicam
 
-1. O **SDK React** chama o **INJI Verify Service** via REST API para criar uma solicitação de verificação (VP Request)
-2. O SDK exibe um **QR Code** (desktop) ou abre um **Deep Link** (mobile) contendo a URL de autorização
-3. O cidadão abre a **Carteira Digital**, que se comunica diretamente com o **INJI Verify Service** para apresentar a credencial
-4. O SDK faz **long-polling** no Service até receber o resultado
-5. O resultado chega ao SDK via callback (`onVpReceived` ou `onVpProcessed`)
+1. O **App Mobile** chama o **INJI Verify Service** via REST API (`POST /v1/verify/vp-request`) para criar uma solicitação de verificação
+2. O app abre a **Carteira Digital** via **Deep Link** (`openid4vp://authorize?...`) com os parâmetros da solicitação
+3. O cidadão autoriza na **Carteira Digital**, que envia a VP diretamente ao **INJI Verify Service** via `direct_post`
+4. O app faz **polling** em `GET /v1/verify/vp-request/{requestId}/status` até receber `VP_SUBMITTED`
+5. O app busca o resultado em `GET /v1/verify/vp-result/{transactionId}` e lê as credenciais verificadas (`CCIRCredential`, `CARReceipt`, `CARDocument`)
 
 ## Regras Fundamentais
 
-1. **Não é necessário um backend customizado** — o INJI Verify SDK e o INJI Verify Service fazem toda a orquestração.
+1. O app constrói e envia o Deep Link diretamente, sem biblioteca intermediária.
 2. O INJI Verify Service roda **dentro da sua infraestrutura** (sua VM, via Docker).
-3. A Carteira Digital do cidadão precisa **acessar o INJI Verify Service pela internet** — o Service precisa de um domínio público.
-4. O governo **não participa** da verificação em tempo real — a credencial já está com o cidadão.
+3. A Carteira Digital do cidadão precisa **acessar o INJI Verify Service pela internet**, o Service precisa de um domínio público.
+4. O governo **não participa** da verificação em tempo real, as credenciais já estão com o cidadão.
 5. A identidade do verificador é baseada em **DID Web** (`did:web:seu-dominio.com.br:v1:verify`).
 
 ::: {.callout-important}

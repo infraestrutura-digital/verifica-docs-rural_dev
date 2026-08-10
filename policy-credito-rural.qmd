@@ -10,148 +10,84 @@ Entender como configurar a Presentation Definition para documentos necessários 
 
 A Presentation Definition (PD) é um documento JSON que descreve **quais credenciais e campos** você quer que o cidadão apresente. Ela segue o padrão [DIF Presentation Exchange](https://identity.foundation/presentation-exchange/).
 
-No caso do verifica-docs-rural, a PD solicita uma credencial dos documentos CAF, Recibo do CAR, Demonstrativo do CAR e CCIR.
+No caso do verifica-docs-rural, a PD solicita 3 credenciais: `CCIRCredential`, `CARReceipt` e `CARDocument`.
 
-## Presentation Definition para os documentos CAF, Recibo do CAR, Demonstrativo do CAR e CCIR:
+## Presentation Definition para CCIRCredential, CARReceipt e CARDocument:
 
 ```json
 "presentationDefinition": {
- "id": "c4822b58-7fb4-454e-b827-f8758fe27f9a",
+ "id": "imovel-rural-check",
  "purpose": "Relying party is requesting your CAR Document, CAR Receipt, and CCIR Document",
- "format": {
- "ldp_vc": {
- "proof_type": [
- "Ed25519Signature2020"
- ]
-}
- },
- "input_descriptors":
-  [
+ "input_descriptors": [
     {
-      "id": "CAR Document",
-      "format":
-        {
-          "ldp_vc":
-            {
-              "proof_type":
-                [
-                  "Ed25519Signature2020"
-                ]
-            }
-        },
-      "constraints":
-        {
-          "fields":
-            [
-              {
-                "path":
-                  [
-                    "$.type"
-                  ],
-                "filter":
-                  {
-                    "type": "object",
-                    "pattern": "CARDocument"
-                  }
-              }
-            ]
-        }
+      "id": "CCIRCredential",
+      "name": "CCIR - Certificado de Cadastro",
+      "purpose": "Verificar cadastro do imóvel rural (CCIR)",
+      "constraints": {
+        "fields": [
+          {
+            "path": ["$.type"],
+            "filter": { "type": "string", "pattern": "CCIRCredential" }
+          }
+        ]
+      }
     },
     {
-      "id": "CAR Receipt",
-      "format":
-        {
-          "ldp_vc":
-            {
-              "proof_type":
-                [
-                  "Ed25519Signature2020"
-                ]
-            }
-        },
-      "constraints":
-        {
-          "fields":
-            [
-              {
-                "path":
-                  [
-                    "$.type"
-                  ],
-                "filter":
-                  {
-                    "type": "object",
-                    "pattern": "CARReceipt"
-                  }
-              }
-            ]
-        }
+      "id": "CARReceipt",
+      "name": "CAR - Recibo de Inscrição",
+      "purpose": "Verificar inscrição do imóvel no CAR",
+      "constraints": {
+        "fields": [
+          {
+            "path": ["$.type"],
+            "filter": { "type": "string", "pattern": "CARReceipt" }
+          }
+        ]
+      }
     },
     {
-      "id": "CCIR",
-      "format":
-        {
-          "ldp_vc":
-            {
-              "proof_type":
-                [
-                  "Ed25519Signature2020"
-                ]
-            }
-        },
-      "constraints":
-        {
-          "fields":
-            [
-              {
-                "path":
-                  [
-                    "$.type"
-                  ],
-                "filter":
-                  {
-                    "type": "object",
-                    "pattern": "CCIR"
-                  }
-              }
-            ]
-        }
+      "id": "CARDocument",
+      "name": "CAR - Documento",
+      "purpose": "Verificar documento do imóvel no CAR",
+      "constraints": {
+        "fields": [
+          {
+            "path": ["$.type"],
+            "filter": { "type": "string", "pattern": "CARDocument" }
+          }
+        ]
+      }
     }
-}
+  ]
 ```
 
 ::: {.callout-important}
 Esta é uma Presentation Definition **ilustrativa**. A definição exata depende do tipo de credencial emitida pelo governo e do formato suportado. Consulte a documentação do emissor para os campos corretos.
 :::
 
-## Como usar no SDK
+## Como usar no app
 
-### Opção 1 — Inline (passar diretamente)
+A `PRESENTATION_DEFINITION` é definida diretamente no `verifyService.ts` e passada no body do `POST /v1/verify/vp-request`:
 
-```tsx
-<OpenID4VPVerification
-  // ...
-  presentationDefinition={{
-    id: 'CCIR',
-    input_descriptors: [/* ... */]
-  }}
-/>
+```ts
+const body = JSON.stringify({
+  clientId: CLIENT_ID,
+  presentationDefinition: PRESENTATION_DEFINITION,
+});
 ```
 
-### Opção 2 — Pré-cadastrada no Service
+Para verificar uma credencial individual, filtre os `input_descriptors` pelo ID:
 
-Se a Presentation Definition estiver cadastrada no INJI Verify Service, use o ID (pode ser qualquer um dos definidos acima):
-
-```tsx
-<OpenID4VPVerification
-  // ...
-  presentationDefinitionId="CCIR"
-/>
+```ts
+const presentationDef = singleCredentialId
+  ? {
+      id: PRESENTATION_DEFINITION.id,
+      input_descriptors: PRESENTATION_DEFINITION.input_descriptors.filter(
+        d => d.id === singleCredentialId
+      ),
+    }
+  : PRESENTATION_DEFINITION;
 ```
-
-::: {.callout-warning}
-Use **uma ou outra** opção, nunca ambas. O SDK rejeita se ambas forem fornecidas.
-:::
 
 ## O que você recebe
 

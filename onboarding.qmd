@@ -49,7 +49,7 @@ Após o credenciamento, você recebe informações para configurar:
 |------|----------|-----------|
 | DID do verificador | `INJI_DID_VERIFY_URI` | Identidade digital do seu verificador |
 | Keystore PKCS12 | Montado no container | Chave para assinar authorization requests |
-| Presentation Definition | Prop `presentationDefinition` do SDK | Define quais credenciais solicitar |
+| Presentation Definition | `PRESENTATION_DEFINITION` no `verifyService.ts` | Define quais credenciais solicitar (`CCIRCredential`, `CARReceipt`, `CARDocument`) |
 | Domínio público | `INJI_VP_SUBMISSION_BASE_URL` | Endereço para a Wallet enviar credenciais |
 
 ## Ambientes
